@@ -1,0 +1,27 @@
+
+Zombies.png
+size: 128, 64
+format: RGBA8888
+filter: Nearest, Nearest
+repeat: none
+1 Zombie1
+  rotate: false
+  xy: 2, 3
+  size: 34, 36
+  orig: 34, 36
+  offset: 0, 0
+  index: -1
+1 Zombie2
+  rotate: false
+  xy: 73, 2
+  size: 32, 37
+  orig: 32, 37
+  offset: 0, 0
+  index: -1
+1 Zombie3
+  rotate: false
+  xy: 38, 4
+  size: 33, 35
+  orig: 33, 35
+  offset: 0, 0
+  index: -1
