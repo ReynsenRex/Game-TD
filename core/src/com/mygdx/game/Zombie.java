@@ -11,4 +11,11 @@ public class Zombie {
     public float targetX;
     public float targetY;
     public boolean moving;
+
+    public int health;
+
+    public Zombie() {
+        health = 100; // Set default health to 100
+    }
+
 }

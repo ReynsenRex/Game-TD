@@ -4,11 +4,8 @@ import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.Animation;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.graphics.g2d.*;
 import com.badlogic.gdx.utils.Array;
-import com.badlogic.gdx.graphics.g2d.Sprite;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.TimeUtils;
 
@@ -21,6 +18,7 @@ public class MyGdxGame extends ApplicationAdapter {
     private Array<Zombie> zombies;
     private long nextSpawnTime = generateNextSpawnTime();
     private float screenWidth, screenHeight, stateTime;
+    BitmapFont font;
 
     @Override
     public void create() {
@@ -57,6 +55,9 @@ public class MyGdxGame extends ApplicationAdapter {
 
         screenWidth = Gdx.graphics.getWidth();
         screenHeight = Gdx.graphics.getHeight();
+
+        font = new BitmapFont();
+
     }
 
     private void spawnZombie() {
@@ -101,6 +102,9 @@ public class MyGdxGame extends ApplicationAdapter {
         for (Zombie zombie : zombies) {
             zombie.sprite.setPosition(zombie.x, zombie.y);
             batch.draw(currentFrame, zombie.x, zombie.y);
+
+            // Render the zombie's health
+            font.draw(batch, "Health: " + zombie.health, zombie.x, zombie.y + 20);
 
             // Check if the zombie has reached its current target position
             if (zombie.moving) {
@@ -150,6 +154,8 @@ public class MyGdxGame extends ApplicationAdapter {
                     // Update the zombie's position based on the interpolation
                     zombie.x += deltaX * interpolationFactor;
                     zombie.y += deltaY * interpolationFactor;
+
+
                 }
             }
         }
