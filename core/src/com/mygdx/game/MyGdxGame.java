@@ -107,7 +107,7 @@ public class MyGdxGame extends ApplicationAdapter {
             zombie.sprite.draw(batch);
 
             // Render the zombie's health
-            font.draw(batch, "Health: " + zombie.health, zombie.x, zombie.y + 20);
+            font.draw(batch, "Health: " + zombie.health, zombie.x, zombie.y + 90);
             // Check if the zombie has reached its current target position
             if (zombie.moving) {
                 float speed = screenWidth * 0.003f; // Adjust the speed as desired
