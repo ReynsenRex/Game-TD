@@ -27,6 +27,9 @@ public class MyGdxGame extends ApplicationAdapter {
 
         zombieTexture = new Texture(Gdx.files.internal("Zombie.png"));
         TextureRegion[][] tmp = TextureRegion.split(zombieTexture, 124 / 3, 144 / 4);
+        TextureRegion originalRegion = new TextureRegion(texture);
+        originalRegion.setRegionWidth(screenWidth * 0.052f);
+        originalRegion.setRegionHeight(screenHeight * 0.093f);
 
         TextureRegion[] walkFrames = new TextureRegion[12];
         int index = 0;
