@@ -11,7 +11,7 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.TimeUtils;
-
+//COBA
 public class MyGdxGame extends ApplicationAdapter {
     Animation<TextureRegion> zombieAnimation;
     private Texture texture, zombieTexture;
