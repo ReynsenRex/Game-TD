@@ -4,11 +4,8 @@ import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.Animation;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.graphics.g2d.*;
 import com.badlogic.gdx.utils.Array;
-import com.badlogic.gdx.graphics.g2d.Sprite;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.TimeUtils;
 public class MyGdxGame extends ApplicationAdapter {
@@ -21,6 +18,7 @@ public class MyGdxGame extends ApplicationAdapter {
     private long nextSpawnTime = generateNextSpawnTime();
     private float screenWidth, screenHeight, stateTime;
 
+    private BitmapFont font;
     @Override
     public void create() {
 
@@ -53,6 +51,8 @@ public class MyGdxGame extends ApplicationAdapter {
 
         screenWidth = Gdx.graphics.getWidth();
         screenHeight = Gdx.graphics.getHeight();
+
+        font = new BitmapFont();
     }
 
     private void spawnZombie() {
@@ -105,6 +105,9 @@ public class MyGdxGame extends ApplicationAdapter {
             // Draw the current frame of the zombie animation
             zombie.sprite.setRegion(currentFrame);
             zombie.sprite.draw(batch);
+
+            // Render the zombie's health
+            font.draw(batch, "Health: " + zombie.health, zombie.x, zombie.y + 20);
             // Check if the zombie has reached its current target position
             if (zombie.moving) {
                 float speed = screenWidth * 0.003f; // Adjust the speed as desired
