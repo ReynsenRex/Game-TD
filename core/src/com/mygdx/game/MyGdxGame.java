@@ -27,9 +27,6 @@ public class MyGdxGame extends ApplicationAdapter {
 
         zombieTexture = new Texture(Gdx.files.internal("Zombie.png"));
         TextureRegion[][] tmp = TextureRegion.split(zombieTexture, 124 / 3, 144 / 4);
-        TextureRegion originalRegion = new TextureRegion(texture);
-        originalRegion.setRegionWidth(screenWidth * 0.052f);
-        originalRegion.setRegionHeight(screenHeight * 0.093f);
 
         TextureRegion[] walkFrames = new TextureRegion[12];
         int index = 0;
@@ -63,7 +60,13 @@ public class MyGdxGame extends ApplicationAdapter {
         Zombie zombie = new Zombie();
         zombie.texture = zombieTexture;
         zombie.sprite = new Sprite(zombie.texture);
-        zombie.sprite.setSize(screenWidth * 0.052f, screenHeight * 0.093f);
+        TextureRegion currentFrame = zombieAnimation.getKeyFrame(stateTime, true);
+        float frameWidth = currentFrame.getRegionWidth();
+        float frameHeight = currentFrame.getRegionHeight();
+        float scale = 2f; // Set the scale factor to make the sprite appear larger
+        float width = frameWidth * scale;
+        float height = frameHeight * scale;
+        zombie.sprite.setSize(width, height);
         zombie.x = 0;
         zombie.y = screenHeight * 0.416f;
         zombie.targetX = screenWidth * 0.132f;
@@ -100,8 +103,9 @@ public class MyGdxGame extends ApplicationAdapter {
         // Render and update the zombies
         for (Zombie zombie : zombies) {
             zombie.sprite.setPosition(zombie.x, zombie.y);
-            batch.draw(currentFrame, zombie.x, zombie.y);
-
+            // Draw the current frame of the zombie animation
+            zombie.sprite.setRegion(currentFrame);
+            zombie.sprite.draw(batch);
             // Check if the zombie has reached its current target position
             if (zombie.moving) {
                 float speed = screenWidth * 0.003f; // Adjust the speed as desired
