@@ -4,6 +4,8 @@ import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Animation;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -11,26 +13,31 @@ import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.TimeUtils;
 
 public class MyGdxGame extends ApplicationAdapter {
-
-    private Texture zombieUp;
-    private Texture zombieRight;
-    private Texture zombieDown;
+    Animation<TextureRegion> zombieAnimation;
+    private Texture texture, zombieTexture;
     private SpriteBatch batch;
-    private Texture texture;
     private Sprite sprite;
     private OrthographicCamera camera;
     private Array<Zombie> zombies;
     private long nextSpawnTime = generateNextSpawnTime();
-
-    private float screenWidth;
-    private float screenHeight;
+    private float screenWidth, screenHeight, stateTime;
 
     @Override
     public void create() {
 
-        zombieRight = new Texture(Gdx.files.internal("1 Zombie2.png"));
-        zombieUp = new Texture(Gdx.files.internal("1 Zombie3.png"));
-        zombieDown = new Texture(Gdx.files.internal("1 Zombie1.png"));
+        zombieTexture = new Texture(Gdx.files.internal("Zombie.png"));
+        TextureRegion[][] tmp = TextureRegion.split(zombieTexture, 124 / 3, 144 / 4);
+
+        TextureRegion[] walkFrames = new TextureRegion[12];
+        int index = 0;
+        for (int i = 0; i < tmp.length; i++) {
+            for (int j = 0; j < tmp[i].length; j++) {
+                walkFrames[index++] = tmp[i][j];
+            }
+        }
+
+        zombieAnimation = new Animation<TextureRegion>(0.3f, walkFrames);
+        stateTime = 1f;
 
         batch = new SpriteBatch();
 
@@ -51,7 +58,7 @@ public class MyGdxGame extends ApplicationAdapter {
 
     private void spawnZombie() {
         Zombie zombie = new Zombie();
-        zombie.texture = zombieRight;
+        zombie.texture = zombieTexture;
         zombie.sprite = new Sprite(zombie.texture);
         zombie.sprite.setSize(screenWidth * 0.052f, screenHeight * 0.093f);
         zombie.x = 0;
@@ -83,13 +90,14 @@ public class MyGdxGame extends ApplicationAdapter {
         // Begin the sprite batch
         batch.begin();
 
+        stateTime += Gdx.graphics.getDeltaTime(); // Accumulate elapsed animation time
+        TextureRegion currentFrame = zombieAnimation.getKeyFrame(stateTime, true);
         // Render the map
         sprite.draw(batch);
-
         // Render and update the zombies
         for (Zombie zombie : zombies) {
             zombie.sprite.setPosition(zombie.x, zombie.y);
-            zombie.sprite.draw(batch);
+            batch.draw(currentFrame, zombie.x, zombie.y);
 
             // Check if the zombie has reached its current target position
             if (zombie.moving) {
@@ -123,15 +131,15 @@ public class MyGdxGame extends ApplicationAdapter {
                         zombie.targetX = screenWidth * 0.6042f;
                         zombie.targetY = screenHeight * 0.5093f;
                     } else if (zombie.targetX == screenWidth * 0.6042f && zombie.targetY == screenHeight * 0.5093f) {
-                    if (zombie.x >= screenWidth) {
-                        // If the zombie is off-screen, set moving to false to stop rendering it
-                        zombie.moving = false;
-                    } else {
-                        // Continue moving the zombie to the right
-                        zombie.targetX = screenWidth;
-                        zombie.targetY = screenHeight * 0.5093f;
+                        if (zombie.x >= screenWidth) {
+                            // If the zombie is off-screen, set moving to false to stop rendering it
+                            zombie.moving = false;
+                        } else {
+                            // Continue moving the zombie to the right
+                            zombie.targetX = screenWidth;
+                            zombie.targetY = screenHeight * 0.5093f;
+                        }
                     }
-                }
                 } else {
                     // Calculate the interpolation factor based on the distance and speed
                     float interpolationFactor = speed / distance;
