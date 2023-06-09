@@ -1,44 +1,36 @@
 package com.mygdx.game;
 
 import com.badlogic.gdx.ApplicationAdapter;
-import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.*;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.graphics.g2d.Sprite;
-
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.TimeUtils;
 
 public class MyGdxGame extends ApplicationAdapter {
 
     private Texture zombieUp;
-    private Texture ZombieRight;
+    private Texture zombieRight;
     private Texture zombieDown;
-    private Sprite zombie1;
     private SpriteBatch batch;
     private Texture texture;
     private Sprite sprite;
     private OrthographicCamera camera;
-    private Array<Rectangle> zombies;
-    private long spawnTime;
-    private BitmapFont font;
+    private Array<Zombie> zombies;
     private long nextSpawnTime = generateNextSpawnTime();
+
+    private float screenWidth;
+    private float screenHeight;
 
     @Override
     public void create() {
 
-        font = new BitmapFont();
-
-        ZombieRight = new Texture(Gdx.files.internal("1 Zombie2.png"));
+        zombieRight = new Texture(Gdx.files.internal("1 Zombie2.png"));
         zombieUp = new Texture(Gdx.files.internal("1 Zombie3.png"));
         zombieDown = new Texture(Gdx.files.internal("1 Zombie1.png"));
-        zombie1 = new Sprite(ZombieRight);
-        zombie1.setSize(100, 100);
-//        zombie1.setPosition(1160, 340);
 
         batch = new SpriteBatch();
 
@@ -52,74 +44,108 @@ public class MyGdxGame extends ApplicationAdapter {
         camera.setToOrtho(false, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 
         zombies = new Array<>();
-        spawnZombie();
 
+        screenWidth = Gdx.graphics.getWidth();
+        screenHeight = Gdx.graphics.getHeight();
     }
 
     private void spawnZombie() {
-        Rectangle zombies = new Rectangle();
-        zombies.x = 0;
-        zombies.y = 450;
-        zombies.width = 100;
-        zombies.height = 100;
-        this.zombies.add(zombies);
-        spawnTime = TimeUtils.nanoTime();
+        Zombie zombie = new Zombie();
+        zombie.texture = zombieRight;
+        zombie.sprite = new Sprite(zombie.texture);
+        zombie.sprite.setSize(screenWidth * 0.052f, screenHeight * 0.093f);
+        zombie.x = 0;
+        zombie.y = screenHeight * 0.416f;
+        zombie.targetX = screenWidth * 0.132f;
+        zombie.targetY = screenHeight * 0.416f;
+        zombie.moving = true;
+        zombies.add(zombie);
     }
 
     private long generateNextSpawnTime() {
-        return TimeUtils.nanoTime() + (long) (Math.random() * 800000000) + 700000000;
+        return TimeUtils.nanoTime() + (long) (Math.random() * 800000000) + 100000000;
     }
 
     public void render() {
-        batch.begin();
-        ScreenUtils.clear(0, 0, 0.2f, 1);
-        camera.update();
+        // Clear the screen
+        ScreenUtils.clear(0, 0, 0, 1);
 
+        // Update the camera
+        camera.update();
+        batch.setProjectionMatrix(camera.combined);
+
+        // Spawn a new zombie if it's time
         if (TimeUtils.nanoTime() > nextSpawnTime) {
             spawnZombie();
             nextSpawnTime = generateNextSpawnTime();
         }
-        batch.setProjectionMatrix(camera.combined);
+
+        // Begin the sprite batch
+        batch.begin();
+
+        // Render the map
         sprite.draw(batch);
 
-        for (Rectangle zombie : zombies) {
-            if (zombie.x < 255) {
-                // Move to the right until the first turn
-                zombie.x += 1000 * Gdx.graphics.getDeltaTime();
-                zombie.y = 450;
-                batch.draw(ZombieRight, zombie.x, zombie.y, zombie.width, zombie.height);
-            } else if (zombie.x >= 650 && zombie.y > 340) {
-                // Move down until reaching y = 340
-                zombie.x = 650;
-                zombie.y -= 1000 * Gdx.graphics.getDeltaTime();
-                batch.draw(zombieDown, zombie.x, zombie.y, zombie.width, zombie.height);
-            } else if (zombie.x > 1160 && zombie.y <= 340) {
-                // Move up until reaching x = 1160
-                zombie.y += 1000 * Gdx.graphics.getDeltaTime();
-                zombie.x = 1160;
-                batch.draw(zombieUp, zombie.x, zombie.y, zombie.width, zombie.height);
-            } else if (zombie.y <= 340 && zombie.x >= 650 && zombie.x <= 1160) {
-                // Move to the right again after reaching y = 340
-                zombie.y = 340;
-                zombie.x += 1000 * Gdx.graphics.getDeltaTime();
-                batch.draw(ZombieRight, zombie.x, zombie.y, zombie.width, zombie.height);
-            } else if (zombie.y < 775) {
-                // Move up until the second turn
-                zombie.y += 1000 * Gdx.graphics.getDeltaTime();
-                zombie.x = 255;
-                batch.draw(zombieUp, zombie.x, zombie.y, zombie.width, zombie.height);
-            } else if (zombie.y >= 775 && zombie.x <= 650) {
-                // Move to the right until the third turn
-                zombie.y = 775;
-                zombie.x += 1000 * Gdx.graphics.getDeltaTime();
-                batch.draw(ZombieRight, zombie.x, zombie.y, zombie.width, zombie.height);
+        // Render and update the zombies
+        for (Zombie zombie : zombies) {
+            zombie.sprite.setPosition(zombie.x, zombie.y);
+            zombie.sprite.draw(batch);
+
+            // Check if the zombie has reached its current target position
+            if (zombie.moving) {
+                float speed = screenWidth * 0.003f; // Adjust the speed as desired
+
+                // Calculate the direction and distance to the target position
+                float deltaX = zombie.targetX - zombie.x;
+                float deltaY = zombie.targetY - zombie.y;
+                float distance = (float) Math.sqrt(deltaX * deltaX + deltaY * deltaY);
+
+                // Check if the zombie has reached the target position
+                if (distance <= speed) {
+                    // Snap the zombie to the target position
+                    zombie.x = zombie.targetX;
+                    zombie.y = zombie.targetY;
+
+                    // Determine the next target position
+                    if (zombie.targetX == screenWidth * 0.132f && zombie.targetY == screenHeight * 0.416f) {
+                        zombie.targetX = screenWidth * 0.132f;
+                        zombie.targetY = screenHeight * 0.703f;
+                    } else if (zombie.targetX == screenWidth * 0.132f && zombie.targetY == screenHeight * 0.703f) {
+                        zombie.targetX = screenWidth * 0.338f;
+                        zombie.targetY = screenHeight * 0.703f;
+                    } else if (zombie.targetX == screenWidth * 0.338f && zombie.targetY == screenHeight * 0.703f) {
+                        zombie.targetX = screenWidth * 0.338f;
+                        zombie.targetY = screenHeight * 0.314f;
+                    } else if (zombie.targetX == screenWidth * 0.338f && zombie.targetY == screenHeight * 0.314f) {
+                        zombie.targetX = screenWidth * 0.594f;
+                        zombie.targetY = screenHeight * 0.314f;
+                    } else if (zombie.targetX == screenWidth * 0.594f && zombie.targetY == screenHeight * 0.314f) {
+                        zombie.targetX = screenWidth * 0.6042f;
+                        zombie.targetY = screenHeight * 0.5093f;
+                    } else if (zombie.targetX == screenWidth * 0.6042f && zombie.targetY == screenHeight * 0.5093f) {
+                    if (zombie.x >= screenWidth) {
+                        // If the zombie is off-screen, set moving to false to stop rendering it
+                        zombie.moving = false;
+                    } else {
+                        // Continue moving the zombie to the right
+                        zombie.targetX = screenWidth;
+                        zombie.targetY = screenHeight * 0.5093f;
+                    }
+                }
+                } else {
+                    // Calculate the interpolation factor based on the distance and speed
+                    float interpolationFactor = speed / distance;
+
+                    // Update the zombie's position based on the interpolation
+                    zombie.x += deltaX * interpolationFactor;
+                    zombie.y += deltaY * interpolationFactor;
+                }
             }
         }
+
+        // End the sprite batch
         batch.end();
     }
-
-
-
 
     @Override
     public void dispose() {
