@@ -5,6 +5,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.*;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.TimeUtils;
@@ -74,11 +75,19 @@ public class MyGdxGame extends ApplicationAdapter {
         zombies.add(zombie);
     }
 
+    private void spawnTower() {
+        Tower tower = new Tower();
+
+
+    }
+
     private long generateNextSpawnTime() {
         return TimeUtils.nanoTime() + (long) (Math.random() * 800000000) + 100000000;
     }
 
     public void render() {
+
+
         // Clear the screen
         ScreenUtils.clear(0, 0, 0, 1);
 
