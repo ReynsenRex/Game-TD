@@ -5,24 +5,25 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.*;
-import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.TimeUtils;
 public class MyGdxGame extends ApplicationAdapter {
     Animation<TextureRegion> zombieAnimation;
-    private Texture texture, zombieTexture;
+    private Texture texture, zombieTexture, towerTexture;
     private SpriteBatch batch;
     private Sprite sprite;
     private OrthographicCamera camera;
     private Array<Zombie> zombies;
+    private Array<Tower> towers;
     private long nextSpawnTime = generateNextSpawnTime();
     private float screenWidth, screenHeight, stateTime;
+    private Sprite spriteTower;
 
     private BitmapFont font;
     @Override
     public void create() {
-
+        // buat Zombie
         zombieTexture = new Texture(Gdx.files.internal("Zombie.png"));
         TextureRegion[][] tmp = TextureRegion.split(zombieTexture, 124 / 3, 144 / 4);
 
@@ -39,6 +40,7 @@ public class MyGdxGame extends ApplicationAdapter {
 
         batch = new SpriteBatch();
 
+        // MAP
         texture = new Texture("Map.png");
 
         sprite = new Sprite(texture);
@@ -54,6 +56,17 @@ public class MyGdxGame extends ApplicationAdapter {
         screenHeight = Gdx.graphics.getHeight();
 
         font = new BitmapFont();
+        // End of Zombie
+
+        // buat Tower
+        towerTexture = new Texture(Gdx.files.internal("towerTexture.png"));
+
+        towers = new Array<>();
+        towers.add(spawnTower(400,500)); // tower 1
+        towers.add(spawnTower(50,510)); // tower 2
+        towers.add(spawnTower(750,400)); // tower 3
+        towers.add(spawnTower(1300,700)); // tower 4
+
     }
 
     private void spawnZombie() {
@@ -75,10 +88,18 @@ public class MyGdxGame extends ApplicationAdapter {
         zombies.add(zombie);
     }
 
-    private void spawnTower() {
+    private Tower spawnTower(float x, float y) {
         Tower tower = new Tower();
+        Tower.sprite = new Sprite(towerTexture);
+        // Set the tower sprite's position and scale
+        float towerScale = 0.6f; // Adjust the scale factor as desired
 
+        Tower.sprite.setPosition(x, y);
+        Tower.sprite.setScale(towerScale);
 
+        spriteTower = Tower.sprite;
+
+        return tower;
     }
 
     private long generateNextSpawnTime() {
@@ -168,6 +189,12 @@ public class MyGdxGame extends ApplicationAdapter {
                 }
             }
         }
+
+        // draw tower
+        for (Tower tower : towers) {
+            Tower.sprite.draw(batch);
+        }
+
 
         // End the sprite batch
         batch.end();

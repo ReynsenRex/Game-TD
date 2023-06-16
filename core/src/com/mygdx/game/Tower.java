@@ -8,7 +8,7 @@ public class Tower {
     private int fireRate;
 
     public Texture texture;
-    public Sprite sprite;
+    public static Sprite sprite;
 
     public Tower(int damage, int range, int fireRate) {
         this.damage = damage;

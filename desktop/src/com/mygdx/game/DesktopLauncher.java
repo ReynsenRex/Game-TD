@@ -7,6 +7,7 @@ public class DesktopLauncher {
  public static void main (String[] arg) {
   Lwjgl3ApplicationConfiguration config = new Lwjgl3ApplicationConfiguration();
   config.setFullscreenMode(Lwjgl3ApplicationConfiguration.getDisplayMode());
+  //config.setWindowedMode(1280, 720);
   config.setForegroundFPS(60);
   config.useVsync(true);
   config.setTitle("Tower Defense");
