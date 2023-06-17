@@ -2,12 +2,17 @@ package com.mygdx.game;
 
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.*;
+import com.badlogic.gdx.physics.bullet.Bullet;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.TimeUtils;
+
+import java.awt.*;
+
 public class MyGdxGame extends ApplicationAdapter {
     Animation<TextureRegion> zombieAnimation;
     private Texture texture, zombieTexture, towerTexture;
@@ -19,10 +24,15 @@ public class MyGdxGame extends ApplicationAdapter {
     private long nextSpawnTime = generateNextSpawnTime();
     private float screenWidth, screenHeight, stateTime;
     private Sprite spriteTower;
-
+    private Screen currentScreen;
     private BitmapFont font;
     @Override
     public void create() {
+
+        MenuScreen menuScreen = new MenuScreen();
+        // Set the initial screen to the menu screen
+        setScreen(menuScreen);
+
         // buat Zombie
         zombieTexture = new Texture(Gdx.files.internal("Zombie.png"));
         TextureRegion[][] tmp = TextureRegion.split(zombieTexture, 124 / 3, 144 / 4);
@@ -106,8 +116,11 @@ public class MyGdxGame extends ApplicationAdapter {
         return TimeUtils.nanoTime() + (long) (Math.random() * 800000000) + 100000000;
     }
 
-    public void render() {
+    public void setScreen(MenuScreen gameScreen) {
+        gameScreen.render(1f);
+    }
 
+    public void render() {
 
         // Clear the screen
         ScreenUtils.clear(0, 0, 0, 1);
@@ -205,4 +218,5 @@ public class MyGdxGame extends ApplicationAdapter {
         batch.dispose();
         texture.dispose();
     }
+
 }
