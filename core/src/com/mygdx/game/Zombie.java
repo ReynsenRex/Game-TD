@@ -131,7 +131,7 @@ public class Zombie {
             zombie.sprite.draw(batch);
 
             // Render the zombie's health
-            font.draw(batch, "Health: " + zombie.getHealth(), zombie.x, zombie.y + 90);
+            font.draw(batch, "      " + zombie.getHealth(), zombie.x, zombie.y + 90);
             // Check if the zombie has reached its current target position
             if (zombie.moving) {
                 float speed = screenWidth * 0.001f; // Adjust the speed as desired

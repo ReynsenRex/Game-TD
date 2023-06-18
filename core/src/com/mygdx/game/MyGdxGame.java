@@ -3,15 +3,15 @@ package com.mygdx.game;
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.*;
 
-import java.awt.event.MouseListener;
 import java.util.ArrayList;
 
 public class MyGdxGame extends ApplicationAdapter {
-    private Texture texture;
+    private Texture texture, menu;
     private SpriteBatch batch;
     private Sprite sprite;
     private OrthographicCamera camera;
@@ -19,17 +19,20 @@ public class MyGdxGame extends ApplicationAdapter {
     private BitmapFont font;
     private ArrayList<Tower> towers = new ArrayList<>();
     private boolean Start;
-
+    private Music bgMusic;
     @Override
     public void create() {
-//        MenuScreen menuScreen = new MenuScreen();
-//        // Set the initial screen to the menu screen
-//        setScreen(menuScreen);
-
 
         batch = new SpriteBatch();
         // MAP
         texture = new Texture("Map.png");
+
+        // Menu
+        menu = new Texture("MENU.png");
+
+        bgMusic = Gdx.audio.newMusic(Gdx.files.internal("BG_Sound.mp3"));
+        bgMusic.setLooping(true);
+        bgMusic.setVolume(0.05f);
 
         sprite = new Sprite(texture);
         sprite.setSize(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
@@ -50,20 +53,15 @@ public class MyGdxGame extends ApplicationAdapter {
 
     }
 
-    //    public void setScreen(MenuScreen gameScreen) {
-//        gameScreen.render(1f);
-//    }
-    boolean play = false; // Add this variable outside the main game loop
+    boolean play = false;
 
     @Override
     public void render() {
-        texture = new Texture("MENU.png");
         batch.begin();
-        batch.draw(texture,0,0);
+        batch.draw(menu,0,0);
         batch.end();
-        // Clear the screen
+        //Change Screen
         if (!play && Gdx.input.isKeyJustPressed(Input.Keys.ANY_KEY) || Gdx.input.isButtonPressed(Input.Buttons.LEFT)){
-            // First time any key is pressed, enable rendering
             play = true;
         } else if(play && Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)){
             play = false;
@@ -71,6 +69,7 @@ public class MyGdxGame extends ApplicationAdapter {
         }
 
         if (play) {
+            bgMusic.play();
             // Update the camera
             camera.update();
             batch.setProjectionMatrix(camera.combined);
