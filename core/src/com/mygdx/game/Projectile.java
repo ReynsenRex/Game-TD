@@ -1,20 +1,23 @@
 package com.mygdx.game;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
-public class Projectile {
+public class Projectile extends Tower {
     public Sprite sprite;
     public float x;
     public float y;
     public float speed;
     public float directionX;
     public float directionY;
+    public Texture bulletTexture;
 
-    public Projectile(Texture texture) {
-        sprite = new Sprite(texture);
-        speed = 5.0f; // Adjust the bullet speed as desired
+    public SpriteBatch batch;
+
+    public void create() {
+        bulletTexture = new Texture(Gdx.files.internal("Bullet.png"));
     }
 
     public void update(float deltaTime) {
@@ -22,7 +25,7 @@ public class Projectile {
         y += directionY * speed * deltaTime;
     }
 
-    public void render(SpriteBatch batch) {
+    public void render() {
         sprite.draw(batch);
     }
 }
