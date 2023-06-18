@@ -6,8 +6,8 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.*;
-import com.badlogic.gdx.utils.ScreenUtils;
 
+import java.awt.event.MouseListener;
 import java.util.ArrayList;
 
 public class MyGdxGame extends ApplicationAdapter {
@@ -17,17 +17,14 @@ public class MyGdxGame extends ApplicationAdapter {
     private OrthographicCamera camera;
     private Zombie zombie;
     private BitmapFont font;
-    private Tower tower;
-    private float visibilityTimer;
-    private boolean towerVisible;
-    private float[] visibilityTimers = new float[6];
     private ArrayList<Tower> towers = new ArrayList<>();
+    private boolean Start;
 
     @Override
     public void create() {
-        MenuScreen menuScreen = new MenuScreen();
-        // Set the initial screen to the menu screen
-        setScreen(menuScreen);
+//        MenuScreen menuScreen = new MenuScreen();
+//        // Set the initial screen to the menu screen
+//        setScreen(menuScreen);
 
 
         batch = new SpriteBatch();
@@ -53,64 +50,77 @@ public class MyGdxGame extends ApplicationAdapter {
 
     }
 
-    public void setScreen(MenuScreen gameScreen) {
-        gameScreen.render(1f);
-    }
+    //    public void setScreen(MenuScreen gameScreen) {
+//        gameScreen.render(1f);
+//    }
+    boolean play = false; // Add this variable outside the main game loop
 
     @Override
     public void render() {
+
+
         // Clear the screen
-        ScreenUtils.clear(0, 0, 0, 1);
+        if (!play && Gdx.input.isKeyJustPressed(Input.Keys.ANY_KEY) || Gdx.input.isButtonPressed(Input.Buttons.LEFT)){
+            // First time any key is pressed, enable rendering
+            play = true;
+        } else if(play && Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)){
+            play = false;
+            Gdx.app.exit();
+        }
 
-        // Update the camera
-        camera.update();
-        batch.setProjectionMatrix(camera.combined);
+        if (play) {
+            // Update the camera
+            camera.update();
+            batch.setProjectionMatrix(camera.combined);
 
-        // Begin the sprite batch
-        batch.begin();
+            // Begin the sprite batch
+            batch.begin();
 
-        // Render the map
-        sprite.draw(batch);
+            // Render the map
+            sprite.draw(batch);
 
-        // End the sprite batch
-        batch.end();
+            // End the sprite batch
+            batch.end();
 
-        // Render the Zombies
-        zombie.render();
+            // Render the Zombies
+            zombie.render();
 
-        for (Tower tower : towers) {
-            if (tower.isVisible()) {
-                tower.render(batch);
-                tower.update(Gdx.graphics.getDeltaTime());
+            for (Tower tower : towers) {
+                if (tower.isVisible()) {
+                    tower.render(batch);
+                    tower.update(Gdx.graphics.getDeltaTime());
+                }
+            }
+
+            // Spawn towers based on key input
+            if (Gdx.input.isKeyPressed(Input.Keys.NUM_1) && !towers.get(0).isVisible()) {
+                towers.get(0).spawnTower(50, 510);
+            }
+            if (Gdx.input.isKeyPressed(Input.Keys.NUM_2) && !towers.get(1).isVisible()) {
+                towers.get(1).spawnTower(400, 550);
+            }
+            if (Gdx.input.isKeyPressed(Input.Keys.NUM_3) && !towers.get(2).isVisible()) {
+                towers.get(2).spawnTower(750, 400);
+            }
+            if (Gdx.input.isKeyPressed(Input.Keys.NUM_4) && !towers.get(3).isVisible()) {
+                towers.get(3).spawnTower(1100, 100);
+            }
+            if (Gdx.input.isKeyPressed(Input.Keys.NUM_5) && !towers.get(4).isVisible()) {
+                towers.get(4).spawnTower(1300, 700);
+            }
+            if (Gdx.input.isKeyPressed(Input.Keys.NUM_6) && !towers.get(5).isVisible()) {
+                towers.get(5).spawnTower(1500, 300);
             }
         }
-
-        // Spawn towers based on key input
-        if (Gdx.input.isKeyPressed(Input.Keys.NUM_1) && !towers.get(0).isVisible()) {
-            towers.get(0).spawnTower(50, 510);
-        }
-        if (Gdx.input.isKeyPressed(Input.Keys.NUM_2) && !towers.get(1).isVisible()) {
-            towers.get(1).spawnTower(400, 550);
-        }
-        if (Gdx.input.isKeyPressed(Input.Keys.NUM_3) && !towers.get(2).isVisible()) {
-            towers.get(2).spawnTower(750, 400);
-        }
-        if (Gdx.input.isKeyPressed(Input.Keys.NUM_4) && !towers.get(3).isVisible()) {
-            towers.get(3).spawnTower(1100, 100);
-        }
-        if (Gdx.input.isKeyPressed(Input.Keys.NUM_5) && !towers.get(4).isVisible()) {
-            towers.get(4).spawnTower(1300, 700);
-        }
-        if (Gdx.input.isKeyPressed(Input.Keys.NUM_6) && !towers.get(5).isVisible()) {
-            towers.get(5).spawnTower(1500, 300);
-        }
     }
+
 
     @Override
     public void dispose() {
         batch.dispose();
         texture.dispose();
     }
+
 }
 
 
