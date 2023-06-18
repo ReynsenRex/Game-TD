@@ -57,8 +57,10 @@ public class MyGdxGame extends ApplicationAdapter {
 
     @Override
     public void render() {
-
-
+        texture = new Texture("MENU.png");
+        batch.begin();
+        batch.draw(texture,0,0);
+        batch.end();
         // Clear the screen
         if (!play && Gdx.input.isKeyJustPressed(Input.Keys.ANY_KEY) || Gdx.input.isButtonPressed(Input.Buttons.LEFT)){
             // First time any key is pressed, enable rendering
