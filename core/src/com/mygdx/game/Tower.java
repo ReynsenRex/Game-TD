@@ -11,9 +11,8 @@ public class Tower {
     private int damage;
     private int range;
     private int fireRate;
-    public static Sprite sprite;
+    public Sprite sprite;
     public Texture towerTexture;
-
     private SpriteBatch batch;
 
     private float visibilityTimer; // Timer to control tower visibility
@@ -34,23 +33,22 @@ public class Tower {
 
     public void spawnTower(float x, float y) {
         towerTexture = new Texture(Gdx.files.internal("towerTexture.png"));
-        visibilityTimer = 5.0f; // Set the visibility timer to 5 seconds
-        isVisible = true; // Initially, tower is visible
-        Tower tower = new Tower();
-        Tower.sprite = new Sprite(towerTexture);
+        visibilityTimer = 5.0f;
+        isVisible = true;
 
-        float towerScale = 0.6f; // Adjust the scale factor as desired
+        Sprite towerSprite = new Sprite(towerTexture);
+        float towerScale = 0.6f;
+        towerSprite.setPosition(x, y);
+        towerSprite.setScale(towerScale);
 
-        Tower.sprite.setPosition(x, y);
-        Tower.sprite.setScale(towerScale);
+        sprite = towerSprite; // Assign the new Sprite instance to the tower's sprite variable
     }
+
 
     public void render(SpriteBatch batch) {
         if (isVisible) {
             batch.begin();
-
-            Tower.sprite.draw(batch);
-
+            sprite.draw(batch);
             batch.end();
         }
     }
@@ -59,10 +57,9 @@ public class Tower {
 
     public void update(float deltaTime) {
         if (isVisible) {
-            visibilityTimer -= deltaTime; // Decrease the visibility timer
-
+            visibilityTimer -= deltaTime;
             if (visibilityTimer <= 0) {
-                isVisible = false; // If the timer reaches or goes below 0, hide the tower
+                isVisible = false;
             }
         }
     }
@@ -85,5 +82,9 @@ public class Tower {
 
     public void setFireRate(int fireRate) {
         this.fireRate = fireRate;
+    }
+
+    public boolean isVisible() {
+        return isVisible;
     }
 }
