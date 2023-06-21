@@ -24,6 +24,7 @@ public class MyGdxGame extends ApplicationAdapter {
     public void create() {
 
         batch = new SpriteBatch();
+
         // MAP
         texture = new Texture("Map.png");
 
@@ -70,6 +71,7 @@ public class MyGdxGame extends ApplicationAdapter {
 
         if (play) {
             bgMusic.play();
+
             // Update the camera
             camera.update();
             batch.setProjectionMatrix(camera.combined);
