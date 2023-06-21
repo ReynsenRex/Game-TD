@@ -1,11 +1,13 @@
 package com.mygdx.game;
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.Sprite;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
 import java.util.ArrayList;
+
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.scenes.scene2d.ui.List;
+import com.badlogic.gdx.utils.Array;
 
 public class Tower {
     private int damage;
@@ -14,7 +16,8 @@ public class Tower {
     public Sprite sprite;
     public Texture towerTexture;
     private SpriteBatch batch;
-
+    private ArrayList<Projectile> projectiles;
+    private Array<Zombie> zombies;
     private float visibilityTimer; // Timer to control tower visibility
     private boolean isVisible; // Flag indicating tower visibility
 
@@ -22,13 +25,13 @@ public class Tower {
         this.damage = damage;
         this.range = range;
         this.fireRate = fireRate;
-    }
-
-    public Tower(SpriteBatch batch) {
-        this.batch = batch;
+        this.projectiles = new ArrayList<>();
+        this.zombies = new Array<>();
     }
 
     public Tower() {
+        this.projectiles = new ArrayList<>();
+        this.zombies = new Array<>();
     }
 
     public void spawnTower(float x, float y) {
@@ -48,11 +51,37 @@ public class Tower {
     public void render(SpriteBatch batch) {
         if (isVisible) {
             batch.begin();
+            // Render each projectile
+            for (Projectile projectile : projectiles) {
+                projectile.render(batch);
+            }
             sprite.draw(batch);
+
             batch.end();
         }
     }
-    public void attack() {
+
+    private float calculateDistance(float x1, float y1, float x2, float y2) {
+        float deltaX = x2 - x1;
+        float deltaY = y2 - y1;
+        return (float) Math.sqrt(deltaX * deltaX + deltaY * deltaY);
+    }
+
+    public void attack(float targetX, float targetY) {
+        // Check if there are any zombies within range
+        for (Zombie zombie : zombies) {
+            float distance = calculateDistance(zombie.getX(), zombie.getY(), targetX, targetY);
+            if (distance <= range) {
+                // Create a new projectile
+                Projectile projectile = new Projectile();
+                projectile.create();
+                projectile.x = sprite.getX();
+                projectile.y = sprite.getY();
+                projectile.directionX = (targetX - projectile.x) / distance;
+                projectile.directionY = (targetY - projectile.y) / distance;
+                projectiles.add(projectile);
+            }
+        }
     }
 
     public void update(float deltaTime) {
@@ -61,8 +90,22 @@ public class Tower {
             if (visibilityTimer <= 0) {
                 isVisible = false;
             }
+            for (int i = projectiles.size() - 1; i >= 0; i--) {
+                Projectile projectile = projectiles.get(i);
+                projectile.update(deltaTime);
+                // Remove projectiles that are off-screen
+                if (projectile.x < 0 || projectile.x > Gdx.graphics.getWidth() ||
+                        projectile.y < 0 || projectile.y > Gdx.graphics.getHeight()) {
+                    projectiles.remove(i);
+                }
+            }
+        }
+        // Update each projectile
+        for (Projectile projectile : projectiles) {
+            projectile.render(batch);
         }
     }
+
 
     public void setDamage(int damage) {
         this.damage = damage;
@@ -86,5 +129,9 @@ public class Tower {
 
     public boolean isVisible() {
         return isVisible;
+    }
+
+    public Array<Zombie> getZombies() {
+        return zombies;
     }
 }

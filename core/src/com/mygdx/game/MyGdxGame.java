@@ -11,14 +11,13 @@ import com.badlogic.gdx.graphics.g2d.*;
 import java.util.ArrayList;
 
 public class MyGdxGame extends ApplicationAdapter {
-    private Texture texture, menu, Bullet;
+    private Texture texture, menu;
     private SpriteBatch batch;
     private Sprite sprite;
     private OrthographicCamera camera;
     private Zombie zombie;
     private BitmapFont font;
     private ArrayList<Tower> towers = new ArrayList<>();
-    private boolean Start;
     private Music bgMusic;
     @Override
     public void create() {
@@ -75,26 +74,26 @@ public class MyGdxGame extends ApplicationAdapter {
             // Update the camera
             camera.update();
             batch.setProjectionMatrix(camera.combined);
-            Bullet = new Texture("fireBullet.png");
 
             // Begin the sprite batch
             batch.begin();
 
             // Render the map
             sprite.draw(batch);
-            batch.draw(Bullet,500,500);
-            // End the sprite batch
             batch.end();
-
-            // Render the Zombies
-            zombie.render();
 
             for (Tower tower : towers) {
                 if (tower.isVisible()) {
                     tower.render(batch);
                     tower.update(Gdx.graphics.getDeltaTime());
+                    tower.attack(zombie.getX(), zombie.getY()); // Call attack() method on each tower
                 }
             }
+            // Render the Zombies
+            zombie.render();
+
+
+
 
             // Spawn towers based on key input
             if (Gdx.input.isKeyPressed(Input.Keys.NUM_1) && !towers.get(0).isVisible()) {

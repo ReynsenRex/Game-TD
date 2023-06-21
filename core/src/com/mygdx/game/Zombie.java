@@ -191,6 +191,14 @@ public class Zombie {
         batch.end();
     }
 
+    public float getX() {
+        return x;
+    }
+
+    public float getY() {
+        return y;
+    }
+
     public float getStateTime() {
         return stateTime;
     }
