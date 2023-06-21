@@ -11,7 +11,7 @@ import com.badlogic.gdx.graphics.g2d.*;
 import java.util.ArrayList;
 
 public class MyGdxGame extends ApplicationAdapter {
-    private Texture texture, menu;
+    private Texture texture, menu, Bullet;
     private SpriteBatch batch;
     private Sprite sprite;
     private OrthographicCamera camera;
@@ -75,13 +75,14 @@ public class MyGdxGame extends ApplicationAdapter {
             // Update the camera
             camera.update();
             batch.setProjectionMatrix(camera.combined);
+            Bullet = new Texture("fireBullet.png");
 
             // Begin the sprite batch
             batch.begin();
 
             // Render the map
             sprite.draw(batch);
-
+            batch.draw(Bullet,500,500);
             // End the sprite batch
             batch.end();
 
