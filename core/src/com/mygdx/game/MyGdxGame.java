@@ -11,6 +11,8 @@ import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.*;
+import com.badlogic.gdx.math.MathUtils;
+import com.badlogic.gdx.math.Vector3;
 
 import java.util.ArrayList;
 
@@ -48,12 +50,7 @@ public class MyGdxGame extends ApplicationAdapter {
         camera.setToOrtho(false, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 
         font = new BitmapFont();
-
-        for (int i = 0; i < 6; i++) {
-            Tower tower = new Tower();
-            towers.add(tower);
-        }
-
+        Tower tower = new Tower();
         zombie = new Zombie();
         speedZombie = new speedZombie();
     }
@@ -61,12 +58,12 @@ public class MyGdxGame extends ApplicationAdapter {
     @Override
     public void render() {
         batch.begin();
-        batch.draw(menu,0,0);
+        batch.draw(menu, 0, 0);
         batch.end();
         //Change Screen
-        if (!play && Gdx.input.isKeyJustPressed(Input.Keys.ANY_KEY) || Gdx.input.isButtonPressed(Input.Buttons.LEFT)){
+        if (!play && Gdx.input.isKeyJustPressed(Input.Keys.ANY_KEY) || Gdx.input.isButtonPressed(Input.Buttons.LEFT)) {
             play = true;
-        } else if(play && Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)){
+        } else if (play && Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)) {
             play = false;
             Gdx.app.exit();
         }
@@ -84,37 +81,25 @@ public class MyGdxGame extends ApplicationAdapter {
             // Render the map
             sprite.draw(batch);
             batch.end();
-
-            // Render tower karena tower disimpan di ArrayList jadi menggunakan for each
-            for (Tower tower : towers) {
-                if (tower.isVisible()) {
-                    tower.render(batch);
-                    tower.update(Gdx.graphics.getDeltaTime());
-                }
+            Tower tower = new Tower();
+            if (Gdx.input.isTouched()) {
+                Vector3 touchPos = new Vector3();
+                touchPos.set(Gdx.input.getX(), Gdx.input.getY(), 0);
+                camera.unproject(touchPos);
+                tower.x = touchPos.x - Gdx.graphics.getWidth() / 2;
             }
+
             // Render the Zombies
             zombie.render();
             speedZombie.render();
 
-            // Spawn towers based on key input
-            if (Gdx.input.isKeyPressed(Input.Keys.NUM_1) && !towers.get(0).isVisible()) {
-                towers.get(0).spawnTower(50, 510);
-            }
-            if (Gdx.input.isKeyPressed(Input.Keys.NUM_2) && !towers.get(1).isVisible()) {
-                towers.get(1).spawnTower(400, 550);
-            }
-            if (Gdx.input.isKeyPressed(Input.Keys.NUM_3) && !towers.get(2).isVisible()) {
-                towers.get(2).spawnTower(750, 400);
-            }
-            if (Gdx.input.isKeyPressed(Input.Keys.NUM_4) && !towers.get(3).isVisible()) {
-                towers.get(3).spawnTower(1100, 100);
-            }
-            if (Gdx.input.isKeyPressed(Input.Keys.NUM_5) && !towers.get(4).isVisible()) {
-                towers.get(4).spawnTower(1300, 700);
-            }
-            if (Gdx.input.isKeyPressed(Input.Keys.NUM_6) && !towers.get(5).isVisible()) {
-                towers.get(5).spawnTower(1500, 300);
-            }
+            tower.spawnTower(1300, 650); // spawn tower
+            tower.render(batch);
+            tower.spawnGun(1670, 720);
+            tower.render(batch);
+
+
+
         }
     }
 

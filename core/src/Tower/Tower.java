@@ -3,6 +3,7 @@ package Tower;
 import java.util.ArrayList;
 
 import Enemies.Zombie;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.Gdx;
@@ -15,11 +16,15 @@ public class Tower {
     private int fireRate;
     public Sprite sprite;
     public Texture towerTexture;
+    public Texture gunTexture;
     private SpriteBatch batch;
     private ArrayList<Projectile> projectiles;
     private Array<Zombie> zombies;
     private float visibilityTimer; // Timer to control tower visibility
     private boolean isVisible; // Flag indicating tower visibility
+    private boolean play;
+
+    public float x, y;
 
     public Tower(int damage, int range, int fireRate) {
         this.damage = damage;
@@ -35,30 +40,66 @@ public class Tower {
     }
 
     public void spawnTower(float x, float y) {
-        towerTexture = new Texture(Gdx.files.internal("towerTexture.png"));
+        towerTexture = new Texture(Gdx.files.internal("NewTurret.png"));
         visibilityTimer = 5.0f;
         isVisible = true;
 
         Sprite towerSprite = new Sprite(towerTexture);
-        float towerScale = 0.6f;
-        towerSprite.setPosition(x, y);
-        towerSprite.setScale(towerScale);
 
-        sprite = towerSprite; // Assign the new Sprite instance to the tower's sprite variable
+        float towerScale = 0.4f;
+        towerSprite.setOriginCenter();
+        towerSprite.setScale(towerScale);
+        towerSprite.setPosition(x, y);
+
+        sprite = towerSprite;
+        play = true;
+        while (play) {
+            if (Gdx.input.isKeyPressed(Input.Keys.A)) {
+                towerSprite.setRotation(1);
+
+            } else if (Gdx.input.isKeyPressed(Input.Keys.D)) {
+                towerSprite.setRotation(-1);
+            }
+        }
     }
 
+    public void spawnGun(float x, float y) {
+        gunTexture = new Texture(Gdx.files.internal("Cannon.png"));
+
+        Sprite gunSprite = new Sprite(gunTexture);
+        float towerScale = 0.6f;
+
+        gunSprite.setPosition(x, y);
+        gunSprite.setScale(towerScale);
+        gunSprite.setOrigin(x/2,y/2-10);
+
+        sprite = gunSprite;
+
+        if (Gdx.input.isKeyPressed(Input.Keys.A)) {
+            gunSprite.setRotation(150);
+        } else if (Gdx.input.isKeyPressed(Input.Keys.D)) {
+            gunSprite.setRotation(-150);
+        }
+
+    }
+
+    public void rotateGun(float degrees) {
+        sprite.setRotation(degrees);
+    }
 
     public void render(SpriteBatch batch) {
         if (isVisible) {
+            Texture towerTexture = new Texture(Gdx.files.internal("NewTurret.png"));
+            Sprite towerSprite = new Sprite(towerTexture);
             batch.begin();
             // Render each projectile
-            for (Projectile projectile : projectiles) {
-                projectile.render(batch);
-            }
+
+
             sprite.draw(batch);
 
             batch.end();
         }
+
     }
 
     private float calculateDistance(float x1, float y1, float x2, float y2) {
@@ -134,4 +175,20 @@ public class Tower {
     public Array<Zombie> getZombies() {
         return zombies;
     }
+
+    public float getX() {
+        return x;
+    }
+
+    public float getY() {
+        return y;
+    }
+    public float getGunPositionX() {
+        return sprite.getX() + sprite.getWidth() / 2;
+    }
+
+    public float getGunPositionY() {
+        return sprite.getY() + sprite.getHeight() / 2;
+    }
+
 }
