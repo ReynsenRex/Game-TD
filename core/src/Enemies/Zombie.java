@@ -129,7 +129,7 @@ public class Zombie extends Enemy{
             font.draw(batch, "      " + zombie.getHealth(), zombie.x, zombie.y + 90);
             // Check if the zombie has reached its current target position
             if (zombie.moving) {
-                float speed  = 2; // Adjust the  as desired
+                float speed  = 1; // Adjust the  as desired
 
                 // Calculate the direction and distance to the target position
                 float deltaX = zombie.targetX - zombie.x;
@@ -203,5 +203,11 @@ public class Zombie extends Enemy{
         return this.health;
     }
 
+    public Rectangle getHitbox() {
+        return hitbox;
+    }
+
+    public void takeDamage() {
+    }
 }
 

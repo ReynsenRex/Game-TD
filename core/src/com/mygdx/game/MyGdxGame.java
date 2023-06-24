@@ -85,7 +85,6 @@ public class MyGdxGame extends ApplicationAdapter {
             zombie.render();
             speedZombie.render();
             tower.render();
-
         }
     }
 

@@ -127,7 +127,7 @@ public class speedZombie extends Enemy{
             font.draw(batch, "      " + zombie.getHealth(), zombie.x, zombie.y + 90);
             // Check if the zombie has reached its current target position
             if (zombie.moving) {
-                float speed = 3; // Adjust the speed as desired
+                float speed = 2; // Adjust the speed as desired
 
                 // Calculate the direction and distance to the target position
                 float deltaX = zombie.targetX - zombie.x;
