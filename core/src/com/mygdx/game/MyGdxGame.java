@@ -1,5 +1,7 @@
 package com.mygdx.game;
 
+import Enemies.Zombie;
+import Tower.Tower;
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;

@@ -1,4 +1,4 @@
-package com.mygdx.game;
+package Enemies;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
@@ -6,7 +6,7 @@ import com.badlogic.gdx.graphics.g2d.*;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.TimeUtils;
 
-public class Zombie {
+public class Zombie extends Enemy{
     private Animation<TextureRegion> zombieAnimationRight, zombieAnimationUp, zombieAnimationDown;
     private Texture zombieTextureMoveRight, zombieTextureMoveUp, zombieTextureMoveDown;
     private float screenWidth, screenHeight, stateTime; // Animation time for the zombie
@@ -19,8 +19,8 @@ public class Zombie {
     private long nextSpawnTime = generateNextSpawnTime();
     private SpriteBatch batch;
     private BitmapFont font;
-
     public Zombie() {
+        super(new Texture(Gdx.files.internal("ZombieRight.png")), 0, 0);
 
         batch = new SpriteBatch();
         font = new BitmapFont();
@@ -70,14 +70,15 @@ public class Zombie {
     }
 
     public Zombie(int initialHealth) {
+        super(new Texture(Gdx.files.internal("ZombieRight.png")), 0, 0);
         this.health = initialHealth;
     }
-
-    private long generateNextSpawnTime() {
+    @Override
+    public long generateNextSpawnTime() {
         return TimeUtils.nanoTime() + (long) (Math.random() * 800000000) + 100000000;
     }
-
-    private void spawnZombie() {
+    @Override
+    public void spawnZombie() {
         Zombie zombie = new Zombie();
         zombie.texture = zombieTextureMoveRight;
         zombie.sprite = new Sprite(zombie.texture);
@@ -95,7 +96,7 @@ public class Zombie {
         zombie.moving = true;
         zombies.add(zombie);
     }
-
+    @Override
     public void render() {
         batch.begin();
 
@@ -206,7 +207,7 @@ public class Zombie {
         this.stateTime = stateTime;
     }
 
-    public float getHealth() {
+    public int getHealth() {
         return health;
     }
 
