@@ -3,6 +3,7 @@ package Enemies;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.*;
+import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.TimeUtils;
 
@@ -16,11 +17,14 @@ public class Zombie extends Enemy{
     private long nextSpawnTime = generateNextSpawnTime();
     private SpriteBatch batch;
     private BitmapFont font;
+    private Rectangle hitbox;
+
     public Zombie() {
         super(new Texture(Gdx.files.internal("ZombieRight.png")),0 , 450);
 
         batch = new SpriteBatch();
         font = new BitmapFont();
+        hitbox = new Rectangle(x, y, 70, 70); // Create the hitbox with initial position and size
 
         // Buat Zombie
         zombieTextureMoveRight = new Texture(Gdx.files.internal("ZombieRight.png"));
@@ -104,6 +108,7 @@ public class Zombie extends Enemy{
         // Render and update the zombies
         for (Enemy zombie : zombies) {
             zombie.sprite.setPosition(zombie.x, zombie.y);
+            hitbox.setPosition(zombie.x, zombie.y);
 
             zombie.sprite.setRegion(currentFrame);
             zombie.sprite.draw(batch);
