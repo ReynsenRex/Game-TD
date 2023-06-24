@@ -1,6 +1,8 @@
 package com.mygdx.game;
 
+import Enemies.Enemy;
 import Enemies.Zombie;
+import Enemies.speedZombie;
 import Tower.Tower;
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
@@ -17,11 +19,11 @@ public class MyGdxGame extends ApplicationAdapter {
     private SpriteBatch batch;
     private Sprite sprite;
     private OrthographicCamera camera;
-    private Zombie zombie;
     private BitmapFont font;
     private ArrayList<Tower> towers = new ArrayList<>();
     private Music bgMusic;
     boolean play = false;
+    private Enemy zombie, speedZombie;
 
     @Override
     public void create() {
@@ -47,14 +49,13 @@ public class MyGdxGame extends ApplicationAdapter {
 
         font = new BitmapFont();
 
-        // Create a new instance of Zombie
-        zombie = new Zombie();
-
         for (int i = 0; i < 6; i++) {
             Tower tower = new Tower();
             towers.add(tower);
         }
 
+        zombie = new Zombie();
+        speedZombie = new speedZombie();
     }
 
     @Override
@@ -89,11 +90,11 @@ public class MyGdxGame extends ApplicationAdapter {
                 if (tower.isVisible()) {
                     tower.render(batch);
                     tower.update(Gdx.graphics.getDeltaTime());
-                    tower.attack(zombie.getX(), zombie.getY()); // Call attack() method on each tower
                 }
             }
             // Render the Zombies
             zombie.render();
+            speedZombie.render();
 
             // Spawn towers based on key input
             if (Gdx.input.isKeyPressed(Input.Keys.NUM_1) && !towers.get(0).isVisible()) {

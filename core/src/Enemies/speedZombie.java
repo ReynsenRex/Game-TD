@@ -6,7 +6,7 @@ import com.badlogic.gdx.graphics.g2d.*;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.TimeUtils;
 
-public class Zombie extends Enemy{
+public class speedZombie extends Enemy{
     private Animation<TextureRegion> zombieAnimationRight, zombieAnimationUp, zombieAnimationDown;
     private Texture zombieTextureMoveRight, zombieTextureMoveUp, zombieTextureMoveDown;
     private float screenWidth, screenHeight, stateTime; // Animation time for the zombie
@@ -16,14 +16,14 @@ public class Zombie extends Enemy{
     private long nextSpawnTime = generateNextSpawnTime();
     private SpriteBatch batch;
     private BitmapFont font;
-    public Zombie() {
-        super(new Texture(Gdx.files.internal("ZombieRight.png")),0 , 450);
+    public speedZombie() {
+        super(new Texture(Gdx.files.internal("speedZombieRight.png")),0 , 450);
 
         batch = new SpriteBatch();
         font = new BitmapFont();
 
         // Buat Zombie
-        zombieTextureMoveRight = new Texture(Gdx.files.internal("ZombieRight.png"));
+        zombieTextureMoveRight = new Texture(Gdx.files.internal("speedZombieRight.png"));
 
         TextureRegion[][] textureMoveRight = TextureRegion.split(zombieTextureMoveRight, 124 / 3, 36);
         TextureRegion[] walkFramesRight = new TextureRegion[textureMoveRight.length * textureMoveRight[0].length];
@@ -34,7 +34,7 @@ public class Zombie extends Enemy{
             }
         }
 
-        zombieTextureMoveUp = new Texture(Gdx.files.internal("ZombieUp.png"));
+        zombieTextureMoveUp = new Texture(Gdx.files.internal("speedZombieUp.png"));
         TextureRegion[][] textureMoveUp = TextureRegion.split(zombieTextureMoveUp, 124 / 3, 36);
         TextureRegion[] walkFramesUp = new TextureRegion[textureMoveUp.length * textureMoveUp[0].length];
         int indexUp = 0;
@@ -44,7 +44,7 @@ public class Zombie extends Enemy{
             }
         }
 
-        zombieTextureMoveDown = new Texture(Gdx.files.internal("ZombieDown.png"));
+        zombieTextureMoveDown = new Texture(Gdx.files.internal("speedZombieDown.png"));
         TextureRegion[][] textureMoveDown = TextureRegion.split(zombieTextureMoveDown, 124 / 3, 36);
         TextureRegion[] walkFramesDown = new TextureRegion[textureMoveDown.length * textureMoveDown[0].length];
         System.out.println("zombieTextureMoveDown: " + zombieTextureMoveDown);
@@ -64,7 +64,7 @@ public class Zombie extends Enemy{
 
         screenWidth = Gdx.graphics.getWidth();
         screenHeight = Gdx.graphics.getHeight();
-        this.health = 100;
+        this.health = 50;
     }
     @Override
     public long generateNextSpawnTime() {
@@ -72,7 +72,7 @@ public class Zombie extends Enemy{
     }
     @Override
     public void spawnZombie() {
-        Enemy zombie = new Zombie();
+        Enemy zombie = new speedZombie();
         zombie.texture = zombieTextureMoveRight;
         zombie.sprite = new Sprite(zombie.texture);
         TextureRegion currentFrame = zombieAnimationRight.getKeyFrame(stateTime, true);
@@ -126,7 +126,7 @@ public class Zombie extends Enemy{
             font.draw(batch, "      " + zombie.getHealth(), zombie.x, zombie.y + 90);
             // Check if the zombie has reached its current target position
             if (zombie.moving) {
-                float speed  = 2; // Adjust the  as desired
+                float speed = 3; // Adjust the speed as desired
 
                 // Calculate the direction and distance to the target position
                 float deltaX = zombie.targetX - zombie.x;
@@ -134,7 +134,7 @@ public class Zombie extends Enemy{
                 float distance = (float) Math.sqrt(deltaX * deltaX + deltaY * deltaY);
 
                 // Check if the zombie has reached the target position
-                if (distance <= speed ) {
+                if (distance <= speed) {
                     // Snap the zombie to the target position
                     zombie.x = zombie.targetX;
                     zombie.y = zombie.targetY;
@@ -172,8 +172,8 @@ public class Zombie extends Enemy{
                         }
                     }
                 } else {
-                    // Calculate the interpolation factor based on the distance and 
-                    float interpolationFactor = speed  / distance;
+                    // Calculate the interpolation factor based on the distance and speed
+                    float interpolationFactor = speed / distance;
                     // Update the zombie's position based on the interpolation
                     zombie.x += deltaX * interpolationFactor;
                     zombie.y += deltaY * interpolationFactor;

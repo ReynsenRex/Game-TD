@@ -2,12 +2,11 @@ package Enemies;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 public abstract class Enemy {
     protected Texture texture;
     protected Sprite sprite;
-    protected float x, y;
+    protected float x, y, targetX, targetY;
     protected boolean moving;
     protected int health;
 
@@ -17,32 +16,22 @@ public abstract class Enemy {
         this.x = x;
         this.y = y;
         this.moving = false;
-        this.health = 100; // Default health
+        this.health = 0; // Default health
     }
-
-    // Add any common methods or attributes here
-    // ...
-
-    public void render(SpriteBatch batch) {
-        // Render the enemy sprite
-        sprite.setPosition(x, y);
-        sprite.draw(batch);
-
-        // Render additional enemy-specific details
-        // ...
-    }
-
     public abstract long generateNextSpawnTime();
     public abstract void spawnZombie();
     public abstract void render();
-
-
-
-    public int getHealth() {
-        return health;
+    public float getX(){
+        return x;
     }
 
-    public void setHealth(int health) {
-        this.health = health;
+    public float getY(){
+        return y;
     }
+
+    public abstract int setHealth();
+
+    public abstract int getHealth();
+
+
 }
