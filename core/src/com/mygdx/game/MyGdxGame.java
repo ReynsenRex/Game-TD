@@ -11,8 +11,6 @@ import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.*;
-import com.badlogic.gdx.math.MathUtils;
-import com.badlogic.gdx.math.Vector3;
 
 import java.util.ArrayList;
 
@@ -26,6 +24,7 @@ public class MyGdxGame extends ApplicationAdapter {
     private Music bgMusic;
     boolean play = false;
     private Enemy zombie, speedZombie;
+    private Tower tower;
 
     @Override
     public void create() {
@@ -50,7 +49,7 @@ public class MyGdxGame extends ApplicationAdapter {
         camera.setToOrtho(false, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 
         font = new BitmapFont();
-        Tower tower = new Tower();
+        tower = new Tower();
         zombie = new Zombie();
         speedZombie = new speedZombie();
     }
@@ -81,24 +80,11 @@ public class MyGdxGame extends ApplicationAdapter {
             // Render the map
             sprite.draw(batch);
             batch.end();
-            Tower tower = new Tower();
-            if (Gdx.input.isTouched()) {
-                Vector3 touchPos = new Vector3();
-                touchPos.set(Gdx.input.getX(), Gdx.input.getY(), 0);
-                camera.unproject(touchPos);
-                tower.x = touchPos.x - Gdx.graphics.getWidth() / 2;
-            }
 
             // Render the Zombies
             zombie.render();
             speedZombie.render();
-
-            tower.spawnTower(1300, 650); // spawn tower
-            tower.render(batch);
-            tower.spawnGun(1670, 720);
-            tower.render(batch);
-
-
+            tower.render();
 
         }
     }

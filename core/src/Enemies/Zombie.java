@@ -51,8 +51,6 @@ public class Zombie extends Enemy{
         zombieTextureMoveDown = new Texture(Gdx.files.internal("ZombieDown.png"));
         TextureRegion[][] textureMoveDown = TextureRegion.split(zombieTextureMoveDown, 124 / 3, 36);
         TextureRegion[] walkFramesDown = new TextureRegion[textureMoveDown.length * textureMoveDown[0].length];
-        System.out.println("zombieTextureMoveDown: " + zombieTextureMoveDown);
-        System.out.println("textureMoveDown length: " + textureMoveDown.length);
         int indexDown = 0;
         for (int i = 0; i < textureMoveDown.length; i++) {
             for (int j = 0; j < textureMoveDown[i].length; j++) {
