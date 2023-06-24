@@ -5,6 +5,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.*;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.TimeUtils;
+import com.badlogic.gdx.math.Rectangle;
 
 public class speedZombie extends Enemy{
     private Animation<TextureRegion> zombieAnimationRight, zombieAnimationUp, zombieAnimationDown;
@@ -16,12 +17,14 @@ public class speedZombie extends Enemy{
     private long nextSpawnTime = generateNextSpawnTime();
     private SpriteBatch batch;
     private BitmapFont font;
+    private Rectangle hitbox;
+
     public speedZombie() {
         super(new Texture(Gdx.files.internal("speedZombieRight.png")),0 , 450);
 
         batch = new SpriteBatch();
         font = new BitmapFont();
-
+        hitbox = new Rectangle(x, y, 70, 70); // Create the hitbox with initial position and size
         // Buat Zombie
         zombieTextureMoveRight = new Texture(Gdx.files.internal("speedZombieRight.png"));
 
@@ -47,8 +50,6 @@ public class speedZombie extends Enemy{
         zombieTextureMoveDown = new Texture(Gdx.files.internal("speedZombieDown.png"));
         TextureRegion[][] textureMoveDown = TextureRegion.split(zombieTextureMoveDown, 124 / 3, 36);
         TextureRegion[] walkFramesDown = new TextureRegion[textureMoveDown.length * textureMoveDown[0].length];
-        System.out.println("zombieTextureMoveDown: " + zombieTextureMoveDown);
-        System.out.println("textureMoveDown length: " + textureMoveDown.length);
         int indexDown = 0;
         for (int i = 0; i < textureMoveDown.length; i++) {
             for (int j = 0; j < textureMoveDown[i].length; j++) {
@@ -91,8 +92,8 @@ public class speedZombie extends Enemy{
     }
     @Override
     public void render() {
-        batch.begin();
 
+        batch.begin();
         // Spawn a new zombie if it's time
         if (TimeUtils.nanoTime() > nextSpawnTime) {
             spawnZombie();
@@ -104,7 +105,7 @@ public class speedZombie extends Enemy{
         // Render and update the zombies
         for (Enemy zombie : zombies) {
             zombie.sprite.setPosition(zombie.x, zombie.y);
-
+            hitbox.setPosition(zombie.x, zombie.y);
             zombie.sprite.setRegion(currentFrame);
             zombie.sprite.draw(batch);
 
