@@ -18,7 +18,6 @@ public class Zombie {
     private Array<Zombie> zombies;
     private long nextSpawnTime = generateNextSpawnTime();
     private SpriteBatch batch;
-
     private BitmapFont font;
 
     public Zombie() {

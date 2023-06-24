@@ -19,6 +19,8 @@ public class MyGdxGame extends ApplicationAdapter {
     private BitmapFont font;
     private ArrayList<Tower> towers = new ArrayList<>();
     private Music bgMusic;
+    boolean play = false;
+
     @Override
     public void create() {
 
@@ -53,8 +55,6 @@ public class MyGdxGame extends ApplicationAdapter {
 
     }
 
-    boolean play = false;
-
     @Override
     public void render() {
         batch.begin();
@@ -82,6 +82,7 @@ public class MyGdxGame extends ApplicationAdapter {
             sprite.draw(batch);
             batch.end();
 
+            // Render tower karena tower disimpan di ArrayList jadi menggunakan for each
             for (Tower tower : towers) {
                 if (tower.isVisible()) {
                     tower.render(batch);
@@ -91,9 +92,6 @@ public class MyGdxGame extends ApplicationAdapter {
             }
             // Render the Zombies
             zombie.render();
-
-
-
 
             // Spawn towers based on key input
             if (Gdx.input.isKeyPressed(Input.Keys.NUM_1) && !towers.get(0).isVisible()) {
