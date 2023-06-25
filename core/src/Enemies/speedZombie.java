@@ -89,6 +89,8 @@ public class speedZombie extends Enemy{
         zombie.targetY = 450;
         zombie.moving = true;
         zombies.add(zombie);
+
+
     }
     @Override
     public void render() {
@@ -166,6 +168,8 @@ public class speedZombie extends Enemy{
                         if (zombie.x >= screenWidth) {
                             // If the zombie is off-screen, set moving to false to stop rendering it
                             zombie.moving = false;
+                            hasReachedEdge(true);
+
                         } else {
                             // Continue moving the zombie to the right
                             zombie.targetX = screenWidth;

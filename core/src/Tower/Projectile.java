@@ -12,8 +12,6 @@ import com.badlogic.gdx.math.Vector2;
 import Enemies.Zombie;
 import com.badlogic.gdx.utils.Array;
 
-import java.util.Iterator;
-
 public class Projectile {
     private static final float SPEED = 5000f;
     private Sprite sprite;
@@ -54,16 +52,19 @@ public class Projectile {
         sprite.setPosition(position.x, position.y);
         updateHitbox();
 
+        hitSound = Gdx.audio.newSound(Gdx.files.internal("Zombie_attacked_SFX.mp3"));
+        hitSound.setVolume(1L, (float) 0.1);
+
         // Check for collision with zombie
         if (collidesWithZombie(zombie)) {
             // Apply damage to the zombie
             zombie.takeDamage();
 
             // Play hit sound
-//            hitSound.play();
+            hitSound.play();
 
             // Destroy the projectile
-            destroy();
+            destroy(sprite);
         }
     }
 
@@ -95,10 +96,12 @@ public class Projectile {
         return Intersector.overlaps(projectileHitbox, zombieHitbox);
     }
 
-    private void destroy() {
+    private void destroy(Sprite sprite) {
         sprites.removeValue(sprite, true);
 
         // Dispose of the bullet sprite's texture
         sprite.getTexture().dispose();
     }
+
+
 }

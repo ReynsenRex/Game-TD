@@ -1,7 +1,10 @@
 package Enemies;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.math.Rectangle;
+import com.badlogic.gdx.math.Vector2;
 
 public abstract class Enemy {
     protected Texture texture;
@@ -9,6 +12,14 @@ public abstract class Enemy {
     protected float x, y, targetX, targetY;
     protected boolean moving;
     protected int health;
+    protected Vector2 position;
+
+    private Rectangle hitbox;
+
+    public Enemy() {
+        position = new Vector2();
+    }
+
 
     public Enemy(Texture texture, float x, float y) {
         this.texture = texture;
@@ -18,20 +29,29 @@ public abstract class Enemy {
         this.moving = false;
         this.health = 0; // Default health
     }
+
     public abstract long generateNextSpawnTime();
+
     public abstract void spawnZombie();
+
     public abstract void render();
-    public float getX(){
+
+    public float getX() {
         return x;
     }
 
-    public float getY(){
+    public float getY() {
         return y;
     }
 
     public abstract int setHealth();
 
     public abstract int getHealth();
+
+
+    public boolean hasReachedEdge(Boolean condition) {
+        return condition;
+    }
 
 
 }

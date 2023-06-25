@@ -6,6 +6,7 @@ import Enemies.Enemy;
 import Enemies.Zombie;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.Texture;
@@ -18,6 +19,7 @@ public class Tower {
     private float cooldownTimer; // Cooldown timer for shots
     private float cooldownDuration = 0.5f; // Cooldown duration in seconds
     private Enemy zombie;
+    private Sound shootingSound;
 
     public Tower() {
         projectiles = new ArrayList<>();
@@ -33,8 +35,8 @@ public class Tower {
 
     public void render() {
         batch.begin();
-
-        if (Gdx.input.isButtonPressed(Input.Buttons.LEFT) && cooldownTimer <= 0) {
+        if ((Gdx.input.isButtonPressed(Input.Buttons.LEFT) || Gdx.input.isKeyPressed(Input.Keys.SPACE)) && cooldownTimer <= 0) {
+            playSound();
             attack();
             cooldownTimer = cooldownDuration; // Start the cooldown timer
         }
@@ -71,4 +73,12 @@ public class Tower {
 
         projectiles.add(projectile);
     }
+
+    public void playSound() {
+        shootingSound = Gdx.audio.newSound(Gdx.files.internal("Blaster_short.mp3"));
+        shootingSound.setVolume(1L, (float) 0.1);
+        shootingSound.play();
+    }
+
+
 }

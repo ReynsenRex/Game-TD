@@ -8,6 +8,7 @@ import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.audio.Music;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.*;
@@ -25,11 +26,15 @@ public class MyGdxGame extends ApplicationAdapter {
     boolean play = false;
     private Enemy zombie, speedZombie;
     private Tower tower;
+    private int points = 0;
+    private float timer;
 
     @Override
     public void create() {
 
         batch = new SpriteBatch();
+        timer = 0;
+        points = 0;
 
         // MAP
         texture = new Texture("Map.png");
@@ -60,7 +65,7 @@ public class MyGdxGame extends ApplicationAdapter {
         batch.draw(menu, 0, 0);
         batch.end();
         //Change Screen
-        if (!play && Gdx.input.isKeyJustPressed(Input.Keys.ANY_KEY) || Gdx.input.isButtonPressed(Input.Buttons.LEFT)) {
+        if (!play && Gdx.input.isKeyJustPressed(Input.Keys.ANY_KEY)) {
             play = true;
         } else if (play && Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)) {
             play = false;
@@ -69,6 +74,14 @@ public class MyGdxGame extends ApplicationAdapter {
 
         if (play) {
             bgMusic.play();
+
+            // Update the timer
+            timer += Gdx.graphics.getDeltaTime();
+            // Check if one second has elapsed
+            if (timer >= 1.0f) {
+                points += 1;
+                timer -= 1.0f;
+            }
 
             // Update the camera
             camera.update();
@@ -79,12 +92,20 @@ public class MyGdxGame extends ApplicationAdapter {
 
             // Render the map
             sprite.draw(batch);
+            font.getData().setScale(5);  // Increase the font size
+            font.setColor(Color.RED);  // Set the font color
+            font.draw(batch, "Points: " + points, 1500, 200);
             batch.end();
 
             // Render the Zombies
             zombie.render();
             speedZombie.render();
             tower.render();
+
+//            if (zombie.getHitbox().x >= Gdx.graphics.getWidth()) {
+//                gameOver();
+//            }
+
         }
     }
 
@@ -95,6 +116,16 @@ public class MyGdxGame extends ApplicationAdapter {
         texture.dispose();
     }
 
+    public void gameOver() {
+        bgMusic.stop();
+
+        if (Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)) {
+            play = false;
+            Gdx.app.exit();
+        } else if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE)) {
+            play = true;
+        }
+    }
 }
 
 

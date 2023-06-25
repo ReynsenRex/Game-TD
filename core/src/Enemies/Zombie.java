@@ -172,6 +172,7 @@ public class Zombie extends Enemy{
                             // Continue moving the zombie to the right
                             zombie.targetX = screenWidth;
                             zombie.targetY = 550;
+
                         }
                     }
                 } else {
@@ -181,8 +182,11 @@ public class Zombie extends Enemy{
                     zombie.x += deltaX * interpolationFactor;
                     zombie.y += deltaY * interpolationFactor;
                 }
+
             }
         }
+
+
         batch.end();
     }
 
@@ -203,11 +207,13 @@ public class Zombie extends Enemy{
         return this.health;
     }
 
-    public Rectangle getHitbox() {
-        return hitbox;
-    }
+
 
     public void takeDamage() {
+    }
+
+    public Rectangle getHitbox() {
+        return hitbox;
     }
 }
 
