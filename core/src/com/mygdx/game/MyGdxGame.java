@@ -4,6 +4,7 @@ import Enemies.Enemy;
 import Enemies.Zombie;
 import Enemies.speedZombie;
 import Tower.Tower;
+import Tower.Projectile;
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
@@ -12,6 +13,8 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.*;
+import com.badlogic.gdx.math.Circle;
+import com.badlogic.gdx.math.Rectangle;
 
 import java.util.ArrayList;
 
@@ -26,8 +29,11 @@ public class MyGdxGame extends ApplicationAdapter {
     boolean play = false;
     private Enemy zombie, speedZombie;
     private Tower tower;
+    private Projectile projectile;
     private int points = 0;
     private float timer;
+    private Rectangle zombieHitBox;
+    private Rectangle projectilesHitbox;
 
     @Override
     public void create() {
@@ -57,6 +63,8 @@ public class MyGdxGame extends ApplicationAdapter {
         tower = new Tower();
         zombie = new Zombie();
         speedZombie = new speedZombie();
+        projectile = new Projectile();
+
     }
 
     @Override
@@ -96,12 +104,12 @@ public class MyGdxGame extends ApplicationAdapter {
             font.setColor(Color.RED);  // Set the font color
             font.draw(batch, "Points: " + points, 1500, 200);
             batch.end();
-
+            zombieHitBox = zombie.getHitbox();
+            projectilesHitbox = projectile.getHitbox();
             // Render the Zombies
             zombie.render();
-            speedZombie.render();
+//            speedZombie.render();
             tower.render();
-
 //            if (zombie.getHitbox().x >= Gdx.graphics.getWidth()) {
 //                gameOver();
 //            }

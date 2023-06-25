@@ -1,5 +1,6 @@
 package Enemies;
 
+import Tower.Projectile;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.*;
@@ -7,7 +8,7 @@ import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.TimeUtils;
 
-public class Zombie extends Enemy{
+public class Zombie extends Enemy {
     private Animation<TextureRegion> zombieAnimationRight, zombieAnimationUp, zombieAnimationDown;
     private Texture zombieTextureMoveRight, zombieTextureMoveUp, zombieTextureMoveDown;
     private float screenWidth, screenHeight, stateTime; // Animation time for the zombie
@@ -20,7 +21,7 @@ public class Zombie extends Enemy{
     private Rectangle hitbox;
 
     public Zombie() {
-        super(new Texture(Gdx.files.internal("ZombieRight.png")),0 , 450);
+        super(new Texture(Gdx.files.internal("ZombieRight.png")), 0, 450);
 
         batch = new SpriteBatch();
         font = new BitmapFont();
@@ -68,10 +69,12 @@ public class Zombie extends Enemy{
         screenHeight = Gdx.graphics.getHeight();
         this.health = 100;
     }
+
     @Override
     public long generateNextSpawnTime() {
         return TimeUtils.nanoTime() + (long) (Math.random() * 800000000) + 100000000;
     }
+
     @Override
     public void spawnZombie() {
         Enemy zombie = new Zombie();
@@ -91,6 +94,7 @@ public class Zombie extends Enemy{
         zombie.moving = true;
         zombies.add(zombie);
     }
+
     @Override
     public void render() {
         batch.begin();
@@ -111,6 +115,7 @@ public class Zombie extends Enemy{
             zombie.sprite.setRegion(currentFrame);
             zombie.sprite.draw(batch);
 
+
             // Draw the current frame of the zombie animation
             if (zombie.targetX == 255 && zombie.targetY == 760) {
                 currentFrame = zombieAnimationUp.getKeyFrame(stateTime, true);
@@ -129,7 +134,7 @@ public class Zombie extends Enemy{
             font.draw(batch, "      " + zombie.getHealth(), zombie.x, zombie.y + 90);
             // Check if the zombie has reached its current target position
             if (zombie.moving) {
-                float speed  = 1; // Adjust the  as desired
+                float speed = 1; // Adjust the  as desired
 
                 // Calculate the direction and distance to the target position
                 float deltaX = zombie.targetX - zombie.x;
@@ -137,7 +142,7 @@ public class Zombie extends Enemy{
                 float distance = (float) Math.sqrt(deltaX * deltaX + deltaY * deltaY);
 
                 // Check if the zombie has reached the target position
-                if (distance <= speed ) {
+                if (distance <= speed) {
                     // Snap the zombie to the target position
                     zombie.x = zombie.targetX;
                     zombie.y = zombie.targetY;
@@ -176,8 +181,8 @@ public class Zombie extends Enemy{
                         }
                     }
                 } else {
-                    // Calculate the interpolation factor based on the distance and 
-                    float interpolationFactor = speed  / distance;
+                    // Calculate the interpolation factor based on the distance and
+                    float interpolationFactor = speed / distance;
                     // Update the zombie's position based on the interpolation
                     zombie.x += deltaX * interpolationFactor;
                     zombie.y += deltaY * interpolationFactor;
@@ -202,16 +207,18 @@ public class Zombie extends Enemy{
     public int setHealth() {
         return health = 50;
     }
+
     @Override
     public int getHealth() {
         return this.health;
     }
 
 
-
-    public void takeDamage() {
+    public void takeDamage(int damage) {
+        health -= damage;
     }
 
+    @Override
     public Rectangle getHitbox() {
         return hitbox;
     }

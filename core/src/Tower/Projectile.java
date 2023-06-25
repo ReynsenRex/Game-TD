@@ -5,7 +5,6 @@ import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.math.Circle;
 import com.badlogic.gdx.math.Intersector;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
@@ -18,10 +17,9 @@ public class Projectile {
     private Vector2 position;
     private Vector2 target;
     private Vector2 direction;
-    private Circle hitbox; // Hitbox representation
+    private Rectangle hitbox; // Hitbox representation
     private Sound hitSound;
     Array<Sprite> sprites;
-
 
     public Projectile() {
         Texture bulletTexture = new Texture(Gdx.files.internal("fireBullet.png"));
@@ -30,7 +28,7 @@ public class Projectile {
 
         position = new Vector2();
         direction = new Vector2();
-        hitbox = new Circle();
+        hitbox = new Rectangle();
 //        hitSound = Gdx.audio.newSound(Gdx.files.internal("hitSound.wav"));
     }
 
@@ -58,7 +56,7 @@ public class Projectile {
         // Check for collision with zombie
         if (collidesWithZombie(zombie)) {
             // Apply damage to the zombie
-            zombie.takeDamage();
+            zombie.takeDamage(25);
 
             // Play hit sound
             hitSound.play();
@@ -81,17 +79,18 @@ public class Projectile {
         return position.epsilonEquals(target, 1f);
     }
 
-    public Circle getHitbox() {
+    public Rectangle getHitbox() {
         return hitbox;
     }
 
     private void updateHitbox() {
-        float radius = sprite.getWidth() / 2; // Adjust hitbox size as needed
-        hitbox.set(position.x + radius, position.y + radius, radius);
+        float hitboxWidth = sprite.getWidth(); // Adjust hitbox size as needed
+        float hitboxHeight = sprite.getHeight();
+        hitbox.set(position.x, position.y, hitboxWidth, hitboxHeight);
     }
 
     private boolean collidesWithZombie(Zombie zombie) {
-        Circle projectileHitbox = getHitbox();
+        Rectangle projectileHitbox = getHitbox();
         Rectangle zombieHitbox = zombie.getHitbox();
         return Intersector.overlaps(projectileHitbox, zombieHitbox);
     }
@@ -102,6 +101,4 @@ public class Projectile {
         // Dispose of the bullet sprite's texture
         sprite.getTexture().dispose();
     }
-
-
 }

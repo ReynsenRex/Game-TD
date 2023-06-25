@@ -205,5 +205,9 @@ public class speedZombie extends Enemy{
         return this.health;
     }
 
+        @Override
+        public Rectangle getHitbox() {
+            return hitbox;
+        }
 }
 
