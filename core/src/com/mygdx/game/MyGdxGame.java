@@ -32,6 +32,7 @@ public class MyGdxGame extends ApplicationAdapter {
     private float timer;
     private Rectangle zombieHitBox;
     private Rectangle projectilesHitbox;
+    public Player player;
 
     @Override
     public void create() {
@@ -61,7 +62,7 @@ public class MyGdxGame extends ApplicationAdapter {
         tower = new Tower();
         zombie = new Zombie();
         speedZombie = new speedZombie();
-
+        player = new Player();
     }
 
     @Override
@@ -104,7 +105,7 @@ public class MyGdxGame extends ApplicationAdapter {
             // Render the Zombies
             zombie.render();
             speedZombie.render();
-            tower.render();
+            player.Draw(batch);
 //            if (zombie.getHitbox().x >= Gdx.graphics.getWidth()) {
 //                gameOver();
 //            }

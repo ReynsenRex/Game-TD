@@ -47,12 +47,15 @@ public abstract class Enemy {
 
     public abstract int getHealth();
 
-    public abstract Rectangle getHitbox();
     public boolean hasReachedEdge(Boolean condition) {
         return condition;
     }
 
 
     public void takeDamage(int damage) {
+    }
+
+    public Sprite getSprite() {
+        return sprite;
     }
 }

@@ -217,7 +217,7 @@ public class Zombie extends Enemy {
         health -= damage;
     }
 
-    @Override
+
     public Rectangle getHitbox() {
         return hitbox;
     }
