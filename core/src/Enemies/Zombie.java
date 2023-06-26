@@ -1,6 +1,5 @@
 package Enemies;
 
-import Tower.Projectile;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.*;
@@ -21,11 +20,10 @@ public class Zombie extends Enemy {
     private Rectangle hitbox;
 
     public Zombie() {
-        super(new Texture(Gdx.files.internal("ZombieRight.png")), 0, 450);
+        super(new Texture(Gdx.files.internal("ZombieRight.png")), 0, 450,100);
 
         batch = new SpriteBatch();
         font = new BitmapFont();
-        hitbox = new Rectangle(x, y, 70, 70); // Create the hitbox with initial position and size
 
         // Buat Zombie
         zombieTextureMoveRight = new Texture(Gdx.files.internal("ZombieRight.png"));
@@ -92,6 +90,7 @@ public class Zombie extends Enemy {
         zombie.targetX = 255;
         zombie.targetY = 450;
         zombie.moving = true;
+        hitbox = new Rectangle(zombie.x, zombie.y, 70, 70); // Create the hitbox with initial position and size
         zombies.add(zombie);
     }
 
@@ -100,10 +99,11 @@ public class Zombie extends Enemy {
         batch.begin();
 
         // Spawn a new zombie if it's time
-        if (TimeUtils.nanoTime() > nextSpawnTime) {
+        if (TimeUtils.nanoTime() > nextSpawnTime + 110000000) {
             spawnZombie();
             nextSpawnTime = generateNextSpawnTime();
         }
+
         stateTime += Gdx.graphics.getDeltaTime(); // Accumulate elapsed animation time
         TextureRegion currentFrame = zombieAnimationRight.getKeyFrame(stateTime, true);
 
@@ -190,7 +190,6 @@ public class Zombie extends Enemy {
 
             }
         }
-
 
         batch.end();
     }

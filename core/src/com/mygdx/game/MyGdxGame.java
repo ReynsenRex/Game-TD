@@ -4,7 +4,6 @@ import Enemies.Enemy;
 import Enemies.Zombie;
 import Enemies.speedZombie;
 import Tower.Tower;
-import Tower.Projectile;
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
@@ -29,7 +28,6 @@ public class MyGdxGame extends ApplicationAdapter {
     boolean play = false;
     private Enemy zombie, speedZombie;
     private Tower tower;
-    private Projectile projectile;
     private int points = 0;
     private float timer;
     private Rectangle zombieHitBox;
@@ -63,7 +61,6 @@ public class MyGdxGame extends ApplicationAdapter {
         tower = new Tower();
         zombie = new Zombie();
         speedZombie = new speedZombie();
-        projectile = new Projectile();
 
     }
 
@@ -104,11 +101,9 @@ public class MyGdxGame extends ApplicationAdapter {
             font.setColor(Color.RED);  // Set the font color
             font.draw(batch, "Points: " + points, 1500, 200);
             batch.end();
-            zombieHitBox = zombie.getHitbox();
-            projectilesHitbox = projectile.getHitbox();
             // Render the Zombies
             zombie.render();
-//            speedZombie.render();
+            speedZombie.render();
             tower.render();
 //            if (zombie.getHitbox().x >= Gdx.graphics.getWidth()) {
 //                gameOver();

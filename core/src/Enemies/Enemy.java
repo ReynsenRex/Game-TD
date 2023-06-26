@@ -20,13 +20,13 @@ public abstract class Enemy {
     }
 
 
-    public Enemy(Texture texture, float x, float y) {
+    public Enemy(Texture texture, float x, float y, int health) {
         this.texture = texture;
         this.sprite = new Sprite(texture);
         this.x = x;
         this.y = y;
         this.moving = false;
-        this.health = 0; // Default health
+        this.health = health; // Default health
     }
 
     public abstract long generateNextSpawnTime();

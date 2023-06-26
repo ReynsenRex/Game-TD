@@ -15,14 +15,12 @@ import com.badlogic.gdx.math.MathUtils;
 public class Tower {
     public Sprite sprite;
     private SpriteBatch batch;
-    private ArrayList<Projectile> projectiles;
     private float cooldownTimer; // Cooldown timer for shots
     private float cooldownDuration = 0.5f; // Cooldown duration in seconds
     private Enemy zombie;
     private Sound shootingSound;
 
     public Tower() {
-        projectiles = new ArrayList<>();
         batch = new SpriteBatch();
         Texture towerTexture = new Texture(Gdx.files.internal("Turret.png"));
         sprite = new Sprite(towerTexture);
@@ -41,10 +39,6 @@ public class Tower {
             cooldownTimer = cooldownDuration; // Start the cooldown timer
         }
 
-        for (Projectile projectile : projectiles) {
-            projectile.update(Gdx.graphics.getDeltaTime(), (Zombie) zombie);
-            projectile.render(batch);
-        }
 
         float mouseX = Gdx.input.getX();
         float mouseY = Gdx.graphics.getHeight() - Gdx.input.getY();
@@ -67,11 +61,6 @@ public class Tower {
         float mouseX = Gdx.input.getX();
         float mouseY = Gdx.graphics.getHeight() - Gdx.input.getY();
 
-        Projectile projectile = new Projectile();
-        projectile.setPosition(1670, 770);
-        projectile.setTarget(mouseX, mouseY);
-
-        projectiles.add(projectile);
     }
 
     public void playSound() {
