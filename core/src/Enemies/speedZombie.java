@@ -10,6 +10,7 @@ import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.TimeUtils;
 import com.badlogic.gdx.math.Rectangle;
 
+import javax.swing.plaf.nimbus.AbstractRegionPainter;
 import java.util.Iterator;
 
 public class speedZombie extends Enemy {
@@ -31,6 +32,7 @@ public class speedZombie extends Enemy {
     public Sprite projectile_sprite;
     public float speed = 1000;
     public float projectile_speed = 10000;
+    private boolean gameOver = false;
 
 
     public speedZombie() {
@@ -89,27 +91,40 @@ public class speedZombie extends Enemy {
         batch.begin();
         stateTime += Gdx.graphics.getDeltaTime(); // Accumulate elapsed animation time
 
-        // Spawn a new zombie if it's time
-        if (TimeUtils.nanoTime() > nextSpawnTime) {
-            spawnZombie();
-            nextSpawnTime = generateNextSpawnTime();
-        }
+        if (!gameOver) {
+            // Spawn a new zombie if it's time
+            if (TimeUtils.nanoTime() > nextSpawnTime) {
+                spawnZombie();
+                nextSpawnTime = generateNextSpawnTime();
+            }
 
-        for (Rectangle zombie : speedZombie) {
-            batch.draw(currentFrame, zombie.x, zombie.y, 100, 100);
-        }
+            for (Rectangle zombie : speedZombie) {
+                batch.draw(currentFrame, zombie.x, zombie.y, 100, 100);
 
-        // Move and render zombies
-        for (Iterator<Rectangle> iter = speedZombie.iterator(); iter.hasNext(); ) {
-            Rectangle zombie = iter.next();
-            zombie.x += 200 * Gdx.graphics.getDeltaTime();
-            if (zombie.y + 64 < 0) iter.remove();
-            if (zombie.overlaps(projectile_sprite.getBoundingRectangle())) {
-                iter.remove();
+                // Check if zombie reaches the right end of the screen
+                if (zombie.x + zombie.width >= 1920) {
+                    // Game over logic
+                    gameOver = true;
+                    break;
+                }
+            }
+
+            // Move and render zombies
+            for (Iterator<Rectangle> iter = speedZombie.iterator(); iter.hasNext(); ) {
+                Rectangle zombie = iter.next();
+                zombie.x += 200 * Gdx.graphics.getDeltaTime();
+                if (zombie.y + 64 < 0) iter.remove();
+                if (zombie.overlaps(projectile_sprite.getBoundingRectangle())) {
+                    iter.remove();
+                }
             }
 
 
+        } else {
+            // Game over screen
+            font.draw(batch, "Game Over", 1920 / 2 - 100, 1080 / 2);
         }
+
         batch.end();
         Draw(batch);
     }
