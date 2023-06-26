@@ -128,7 +128,7 @@ public class speedZombie extends Enemy {
             // Game over screen
             font.getData().setScale(10);
             font.draw(batch, "Game Over", 1920 / 2 - 400, 1080 / 2);
-
+            Gdx.app.exit();
         }
 
         batch.end();
