@@ -172,6 +172,10 @@ public class speedZombie extends Enemy {
         projectile_sprite.draw(batch);
         batch.end();
     }
+    public boolean isGameOver() {
+        return gameOver;
+    }
+
 }
 
 

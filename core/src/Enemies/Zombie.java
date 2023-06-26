@@ -19,7 +19,7 @@ public class Zombie extends Enemy {
     public float x, y;
     public int health;
     private Array<Enemy> zombies;
-    private Array<Rectangle> speedZombie;
+    private Array<Rectangle> zombiess;
     private long nextSpawnTime = generateNextSpawnTime();
     private SpriteBatch batch;
     private BitmapFont font;
@@ -31,6 +31,7 @@ public class Zombie extends Enemy {
     public Sprite projectile_sprite;
     public float speed = 1000;
     public float projectile_speed = 10000;
+    private speedZombie speedZombie;
     private boolean gameOver = false;
 
 
@@ -51,11 +52,11 @@ public class Zombie extends Enemy {
             }
         }
 
-        speedZombie = new Array<Rectangle>();
+        zombiess = new Array<Rectangle>();
         zombieAnimationRight = new Animation<>(0.3f, walkFramesRight);
 
         zombies = new Array<>();
-
+        speedZombie = new speedZombie();
         screenWidth = Gdx.graphics.getWidth();
         screenHeight = Gdx.graphics.getHeight();
         currentFrame = walkFramesRight[0]; // Set initial frame to zombieMoveRight
@@ -82,7 +83,7 @@ public class Zombie extends Enemy {
         zombie.y = MathUtils.random(0, 1080 - 100);
         zombie.width = 100;
         zombie.height = 100;
-        speedZombie.add(zombie);
+        zombiess.add(zombie);
     }
 
     @Override
@@ -97,7 +98,7 @@ public class Zombie extends Enemy {
                 nextSpawnTime = generateNextSpawnTime();
             }
 
-            for (Rectangle zombie : speedZombie) {
+            for (Rectangle zombie : zombiess) {
                 batch.draw(currentFrame, zombie.x, zombie.y, 100, 100);
 
                 // Check if zombie reaches the right end of the screen
@@ -109,7 +110,7 @@ public class Zombie extends Enemy {
             }
 
             // Move and render zombies
-            for (Iterator<Rectangle> iter = speedZombie.iterator(); iter.hasNext(); ) {
+            for (Iterator<Rectangle> iter = zombiess.iterator(); iter.hasNext(); ) {
                 Rectangle zombie = iter.next();
                 zombie.x += 200 * Gdx.graphics.getDeltaTime();
                 if (zombie.y + 64 < 0) iter.remove();
@@ -120,17 +121,18 @@ public class Zombie extends Enemy {
 
 
         } else {
-            // Game over screen
-            font.draw(batch, "Game Over", 1920 / 2 - 100, 1080 / 2);
+
+            font.getData().setScale(10);
+            font.draw(batch, "Game Over", 1920 / 2 - 400, 1080 / 2);
         }
 
         batch.end();
         Draw(batch);
     }
+
     public float getX() {
         return x;
     }
-
     public float getY() {
         return y;
     }
@@ -150,16 +152,12 @@ public class Zombie extends Enemy {
             projectile_position.x = position.x;
             projectile_position.y = position.y;
         }
-        if (Gdx.input.isKeyPressed(Input.Keys.W)) {
+        if (Gdx.input.isKeyPressed(Input.Keys.UP)) {
             position.y += deltatime * speed;
         }
 
-        if (Gdx.input.isKeyPressed(Input.Keys.S)) {
+        if (Gdx.input.isKeyPressed(Input.Keys.DOWN)) {
             position.y -= deltatime * speed;
-        }
-
-        if (position.y <= 0 || position.y >= Gdx.graphics.getHeight()) {
-            position.y = 0;
         }
 
         projectile_position.x -= deltatime * projectile_speed;
@@ -173,6 +171,13 @@ public class Zombie extends Enemy {
         sprite.draw(batch);
         projectile_sprite.draw(batch);
         batch.end();
+    }
+
+    public boolean isGameOver() {
+        return gameOver;
+    }
+    public void setGameOver(boolean gameOver) {
+        this.gameOver = gameOver;
     }
 }
 
