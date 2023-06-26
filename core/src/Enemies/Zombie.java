@@ -9,6 +9,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.TimeUtils;
 import com.badlogic.gdx.math.Rectangle;
+import com.mygdx.game.Tower;
 
 import java.util.Iterator;
 
@@ -75,6 +76,18 @@ public class Zombie extends Enemy {
     public long generateNextSpawnTime() {
         return TimeUtils.nanoTime() + (long) (Math.random() * 800000000) + 100000000;
     }
+    public void spawnZombie(float spawnRate, float minX, float maxX, float minY, float maxY) {
+        if (TimeUtils.nanoTime() > nextSpawnTime) {
+            Rectangle zombie = new Rectangle();
+            zombie.x = MathUtils.random(minX, maxX);
+            zombie.y = MathUtils.random(minY, maxY);
+            zombie.width = 100;
+            zombie.height = 100;
+            zombiess.add(zombie);
+
+            nextSpawnTime = TimeUtils.nanoTime() + (long) (spawnRate * 1000000000); // Convert spawnRate to nanoseconds
+        }
+    }
 
     @Override
     public void spawnZombie() {
@@ -95,6 +108,7 @@ public class Zombie extends Enemy {
             // Spawn a new zombie if it's time
             if (TimeUtils.nanoTime() > nextSpawnTime) {
                 spawnZombie();
+                spawnZombie(2.0f, 0, 1080 - 100, 0, 1080 - 100);
                 nextSpawnTime = generateNextSpawnTime();
             }
 
@@ -128,6 +142,7 @@ public class Zombie extends Enemy {
 
         batch.end();
         Draw(batch);
+        speedZombie.render();
     }
 
     public float getX() {

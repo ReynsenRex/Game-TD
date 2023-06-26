@@ -1,6 +1,6 @@
 package com.mygdx.game;
 
-import Enemies.Zombie;
+import Enemies.speedZombie;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Texture;
@@ -44,7 +44,7 @@ public class Tower {
 
 
 
-        //projectile_position.x -= deltatime*projectile_speed;
+        projectile_position.x -= deltatime*projectile_speed;
     }
 
     public void Draw(SpriteBatch batch) {
@@ -57,7 +57,7 @@ public class Tower {
         batch.end();
     }
 
-    private boolean collidesWithZombie(Zombie zombie) {
+    public boolean collidesWithZombie(speedZombie zombie) {
         float zombieX = zombie.getX();
         float zombieY = zombie.getY();
         float zombieWidth = zombie.getSprite().getWidth();

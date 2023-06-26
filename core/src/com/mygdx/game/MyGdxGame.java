@@ -108,7 +108,7 @@ public class MyGdxGame extends ApplicationAdapter {
             batch.end();
             // Render the Zombies
             zombie.render();
-            speedZombie.render();
+//            speedZombie.render();
             //player.Draw(batch);
 //            if (zombie.getHitbox().x >= Gdx.graphics.getWidth()) {
 //                gameOver();

@@ -9,6 +9,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.TimeUtils;
 import com.badlogic.gdx.math.Rectangle;
+import com.mygdx.game.Tower;
 
 import java.util.Iterator;
 
@@ -32,6 +33,7 @@ public class speedZombie extends Enemy {
     public float speed = 1000;
     public float projectile_speed = 10000;
     private boolean gameOver = false;
+    private Tower tower;
 
 
     public speedZombie() {
@@ -66,8 +68,10 @@ public class speedZombie extends Enemy {
         projectile_sprite = new Sprite(projectile_texture);
         sprite.setScale((float) 0.5);
         projectile_sprite.setScale((float) 0.2);
-        position = new Vector2(1500,sprite.getScaleY()*sprite.getHeight()/2);
-        projectile_position = new Vector2(0,1000);
+        position = new Vector2(1500, sprite.getScaleY() * sprite.getHeight() / 2);
+        projectile_position = new Vector2(0, 1000);
+        tower = new Tower();
+        tower.Update(Gdx.graphics.getDeltaTime());
     }
 
     @Override
@@ -83,6 +87,7 @@ public class speedZombie extends Enemy {
         zombie.width = 100;
         zombie.height = 100;
         speedZombie.add(zombie);
+
     }
 
     @Override
@@ -127,8 +132,9 @@ public class speedZombie extends Enemy {
         }
 
         batch.end();
-        Draw(batch);
+        tower.Draw(batch);
     }
+
     public float getX() {
         return x;
     }
@@ -147,31 +153,6 @@ public class speedZombie extends Enemy {
         return this.health;
     }
 
-    public void Update(float deltatime) {
-        if (Gdx.input.isKeyPressed(Input.Keys.SPACE)) {
-            projectile_position.x = position.x;
-            projectile_position.y = position.y;
-        }
-        if (Gdx.input.isKeyPressed(Input.Keys.W)) {
-            position.y += deltatime * speed;
-        }
-
-        if (Gdx.input.isKeyPressed(Input.Keys.S)) {
-            position.y -= deltatime * speed;
-        }
-
-        projectile_position.x -= deltatime * projectile_speed;
-    }
-
-    public void Draw(SpriteBatch batch) {
-        Update(Gdx.graphics.getDeltaTime());
-        projectile_sprite.setPosition(projectile_position.x + 250, projectile_position.y + 100);
-        sprite.setPosition(position.x, position.y);
-        batch.begin();
-        sprite.draw(batch);
-        projectile_sprite.draw(batch);
-        batch.end();
-    }
     public boolean isGameOver() {
         return gameOver;
     }
