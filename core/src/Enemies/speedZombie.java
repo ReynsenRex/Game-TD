@@ -121,7 +121,9 @@ public class speedZombie extends Enemy {
 
         } else {
             // Game over screen
-            font.draw(batch, "Game Over", 1920 / 2 - 100, 1080 / 2);
+            font.getData().setScale(10);
+            font.draw(batch, "Game Over", 1920 / 2 - 400, 1080 / 2);
+
         }
 
         batch.end();
@@ -156,10 +158,6 @@ public class speedZombie extends Enemy {
 
         if (Gdx.input.isKeyPressed(Input.Keys.S)) {
             position.y -= deltatime * speed;
-        }
-
-        if (position.y <= 0 || position.y >= Gdx.graphics.getHeight()) {
-            position.y = 0;
         }
 
         projectile_position.x -= deltatime * projectile_speed;

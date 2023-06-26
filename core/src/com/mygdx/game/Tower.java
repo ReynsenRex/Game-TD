@@ -1,15 +1,15 @@
 package com.mygdx.game;
 
+import Enemies.Zombie;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 
-import java.security.Key;
-
-public class Player {
+public class Tower {
     public Vector2 position;
     public Vector2 projectile_position;
     public Sprite sprite;
@@ -18,7 +18,7 @@ public class Player {
     public float projectile_speed = 10000;
 
 
-    public Player() {
+    public Tower() {
         Texture texture = new Texture(Gdx.files.internal("Turret_fix.png"));
         sprite = new Sprite(texture);
         Texture projectile_texture = new Texture(Gdx.files.internal("fireBullet.png"));
@@ -42,11 +42,9 @@ public class Player {
             position.y -= deltatime * speed;
         }
 
-        if (position.y <= 0 || position.y >= Gdx.graphics.getHeight()) {
-            position.y = 0;
-        }
 
-        projectile_position.x -= deltatime*projectile_speed;
+
+        //projectile_position.x -= deltatime*projectile_speed;
     }
 
     public void Draw(SpriteBatch batch) {
@@ -58,4 +56,22 @@ public class Player {
         projectile_sprite.draw(batch);
         batch.end();
     }
+
+    private boolean collidesWithZombie(Zombie zombie) {
+        float zombieX = zombie.getX();
+        float zombieY = zombie.getY();
+        float zombieWidth = zombie.getSprite().getWidth();
+        float zombieHeight = zombie.getSprite().getHeight();
+
+        float projectileX = projectile_position.x;
+        float projectileY = projectile_position.y;
+        float projectileWidth = projectile_sprite.getWidth();
+        float projectileHeight = projectile_sprite.getHeight();
+
+        Rectangle zombieRectangle = new Rectangle(zombieX, zombieY, zombieWidth, zombieHeight);
+        Rectangle projectileRectangle = new Rectangle(projectileX, projectileY, projectileWidth, projectileHeight);
+
+        return zombieRectangle.overlaps(projectileRectangle);
+    }
+
 }
