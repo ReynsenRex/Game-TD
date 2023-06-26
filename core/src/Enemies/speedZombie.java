@@ -10,7 +10,6 @@ import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.TimeUtils;
 import com.badlogic.gdx.math.Rectangle;
 
-import javax.swing.plaf.nimbus.AbstractRegionPainter;
 import java.util.Iterator;
 
 public class speedZombie extends Enemy {
@@ -128,7 +127,6 @@ public class speedZombie extends Enemy {
         batch.end();
         Draw(batch);
     }
-
     public float getX() {
         return x;
     }
