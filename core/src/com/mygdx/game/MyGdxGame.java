@@ -100,7 +100,7 @@ public class MyGdxGame extends ApplicationAdapter {
             sprite.draw(batch);
             font.getData().setScale(5);  // Increase the font size
             font.setColor(Color.RED);  // Set the font color
-            font.draw(batch, "Points: " + points, 1500, 200);
+            font.draw(batch, "Points: " + points, 100, 200);
             batch.end();
             // Render the Zombies
             zombie.render();

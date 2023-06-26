@@ -1,9 +1,11 @@
 package Enemies;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.*;
 import com.badlogic.gdx.math.MathUtils;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.TimeUtils;
 import com.badlogic.gdx.math.Rectangle;
@@ -23,6 +25,13 @@ public class speedZombie extends Enemy {
     private BitmapFont font;
     private Rectangle hitbox;
     private TextureRegion currentFrame;
+    public Vector2 position;
+    public Vector2 projectile_position;
+    public Sprite sprite;
+    public Sprite projectile_sprite;
+    public float speed = 1000;
+    public float projectile_speed = 10000;
+
 
     public speedZombie() {
         super(new Texture(Gdx.files.internal("speedZombieRight.png")), 0, 450, 50);
@@ -49,8 +58,16 @@ public class speedZombie extends Enemy {
         screenWidth = Gdx.graphics.getWidth();
         screenHeight = Gdx.graphics.getHeight();
         currentFrame = walkFramesRight[0]; // Set initial frame to zombieMoveRight
-    }
 
+        Texture texture = new Texture(Gdx.files.internal("Turret_fix.png"));
+        sprite = new Sprite(texture);
+        Texture projectile_texture = new Texture(Gdx.files.internal("fireBullet.png"));
+        projectile_sprite = new Sprite(projectile_texture);
+        sprite.setScale((float) 0.5);
+        projectile_sprite.setScale((float) 0.2);
+        position = new Vector2(1500,sprite.getScaleY()*sprite.getHeight()/2);
+        projectile_position = new Vector2(0,1000);
+    }
 
     @Override
     public long generateNextSpawnTime() {
@@ -79,7 +96,7 @@ public class speedZombie extends Enemy {
         }
 
         for (Rectangle zombie : speedZombie) {
-            batch.draw(currentFrame, zombie.x, zombie.y, 100,100);
+            batch.draw(currentFrame, zombie.x, zombie.y, 100, 100);
         }
 
         // Move and render zombies
@@ -87,13 +104,14 @@ public class speedZombie extends Enemy {
             Rectangle zombie = iter.next();
             zombie.x += 200 * Gdx.graphics.getDeltaTime();
             if (zombie.y + 64 < 0) iter.remove();
-//            if(zombie.overlaps(bucket)) {
-//                iter.remove();
-//            }
+            if (zombie.overlaps(projectile_sprite.getBoundingRectangle())) {
+                iter.remove();
+            }
 
 
         }
         batch.end();
+        Draw(batch);
     }
 
     public float getX() {
@@ -114,9 +132,35 @@ public class speedZombie extends Enemy {
         return this.health;
     }
 
+    public void Update(float deltatime) {
+        if (Gdx.input.isKeyPressed(Input.Keys.SPACE)) {
+            projectile_position.x = position.x;
+            projectile_position.y = position.y;
+        }
+        if (Gdx.input.isKeyPressed(Input.Keys.W)) {
+            position.y += deltatime * speed;
+        }
 
-    public Rectangle getHitbox() {
-        return hitbox;
+        if (Gdx.input.isKeyPressed(Input.Keys.S)) {
+            position.y -= deltatime * speed;
+        }
+
+        if (position.y <= 0 || position.y >= Gdx.graphics.getHeight()) {
+            position.y = 0;
+        }
+
+        projectile_position.x -= deltatime * projectile_speed;
+    }
+
+    public void Draw(SpriteBatch batch) {
+        Update(Gdx.graphics.getDeltaTime());
+        projectile_sprite.setPosition(projectile_position.x + 250, projectile_position.y + 100);
+        sprite.setPosition(position.x, position.y);
+        batch.begin();
+        sprite.draw(batch);
+        projectile_sprite.draw(batch);
+        batch.end();
     }
 }
+
 
