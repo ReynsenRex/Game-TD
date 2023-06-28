@@ -9,16 +9,14 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.TimeUtils;
 import com.badlogic.gdx.math.Rectangle;
-import com.mygdx.game.Tower;
 
 import java.util.Iterator;
 
 public class Zombie extends Enemy {
     private Animation<TextureRegion> zombieAnimationRight;
     private Texture zombieTextureMoveRight;
-    private float screenWidth, screenHeight, stateTime; // Animation time for the zombie
+    private float screenWidth, screenHeight, stateTime;
     public float x, y;
-    public int health;
     private Array<Enemy> zombies;
     private Array<Rectangle> zombiess;
     private long nextSpawnTime = generateNextSpawnTime();
@@ -68,14 +66,15 @@ public class Zombie extends Enemy {
         projectile_sprite = new Sprite(projectile_texture);
         sprite.setScale((float) 0.5);
         projectile_sprite.setScale((float) 0.2);
-        position = new Vector2(1500,sprite.getScaleY()*sprite.getHeight()/2);
-        projectile_position = new Vector2(0,1000);
+        position = new Vector2(1500, sprite.getScaleY() * sprite.getHeight() / 2);
+        projectile_position = new Vector2(0, 1000);
     }
 
     @Override
     public long generateNextSpawnTime() {
         return TimeUtils.nanoTime() + (long) (Math.random() * 800000000) + 100000000;
     }
+
     public void spawnZombie(float spawnRate, float minX, float maxX, float minY, float maxY) {
         if (TimeUtils.nanoTime() > nextSpawnTime) {
             Rectangle zombie = new Rectangle();
@@ -126,7 +125,7 @@ public class Zombie extends Enemy {
             // Move and render zombies
             for (Iterator<Rectangle> iter = zombiess.iterator(); iter.hasNext(); ) {
                 Rectangle zombie = iter.next();
-                zombie.x += 200 * Gdx.graphics.getDeltaTime();
+                zombie.x += 100 * Gdx.graphics.getDeltaTime();
                 if (zombie.y + 64 < 0) iter.remove();
                 if (zombie.overlaps(projectile_sprite.getBoundingRectangle())) {
                     iter.remove();
@@ -149,18 +148,9 @@ public class Zombie extends Enemy {
     public float getX() {
         return x;
     }
+
     public float getY() {
         return y;
-    }
-
-    @Override
-    public int setHealth() {
-        return health = 50;
-    }
-
-    @Override
-    public int getHealth() {
-        return this.health;
     }
 
     public void Update(float deltatime) {
@@ -189,12 +179,6 @@ public class Zombie extends Enemy {
         batch.end();
     }
 
-    public boolean isGameOver() {
-        return gameOver;
-    }
-    public void setGameOver(boolean gameOver) {
-        this.gameOver = gameOver;
-    }
 }
 
 

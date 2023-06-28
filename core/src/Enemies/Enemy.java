@@ -1,24 +1,14 @@
 package Enemies;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
-import com.badlogic.gdx.math.Rectangle;
-import com.badlogic.gdx.math.Vector2;
 
 public abstract class Enemy {
     protected Texture texture;
     protected Sprite sprite;
-    protected float x, y, targetX, targetY;
+    protected float x, y;
     protected boolean moving;
     protected int health;
-    protected Vector2 position;
-    private Rectangle hitbox;
-
-    public Enemy() {
-        position = new Vector2();
-    }
-
 
     public Enemy(Texture texture, float x, float y, int health) {
         this.texture = texture;
@@ -43,19 +33,4 @@ public abstract class Enemy {
         return y;
     }
 
-    public abstract int setHealth();
-
-    public abstract int getHealth();
-
-    public boolean hasReachedEdge(Boolean condition) {
-        return condition;
-    }
-
-
-    public void takeDamage(int damage) {
-    }
-
-    public Sprite getSprite() {
-        return sprite;
-    }
 }

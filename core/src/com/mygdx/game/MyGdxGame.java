@@ -29,8 +29,6 @@ public class MyGdxGame extends ApplicationAdapter {
     private Tower tower;
     private int points = 0;
     private float timer;
-    private Rectangle zombieHitBox;
-    private Rectangle projectilesHitbox;
 
     @Override
     public void create() {
@@ -96,24 +94,12 @@ public class MyGdxGame extends ApplicationAdapter {
 
             // Render the map
             sprite.draw(batch);
-            font.getData().setScale(5);  // Increase the font size
-            font.setColor(Color.RED);  // Set the font color
+            font.getData().setScale(5);
+            font.setColor(Color.RED);
             font.draw(batch, "Timer: " + points, 100, 200);
-            if (points == 5) {
 
-                font.getData().setScale(6);
-                font.draw(batch, "You Win", 1920 / 2 - 300, 1080 / 2);
-
-            }
             batch.end();
-            // Render the Zombies
             zombie.render();
-//            speedZombie.render();
-            //player.Draw(batch);
-//            if (zombie.getHitbox().x >= Gdx.graphics.getWidth()) {
-//                gameOver();
-//            }
-
         }
     }
 

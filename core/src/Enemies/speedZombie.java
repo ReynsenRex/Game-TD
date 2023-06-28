@@ -16,15 +16,12 @@ import java.util.Iterator;
 public class speedZombie extends Enemy {
     private Animation<TextureRegion> zombieAnimationRight;
     private Texture zombieTextureMoveRight;
-    private float screenWidth, screenHeight, stateTime; // Animation time for the zombie
     public float x, y;
-    public int health;
-    private Array<Enemy> zombies;
     private Array<Rectangle> speedZombie;
+    private float stateTime;
     private long nextSpawnTime = generateNextSpawnTime();
     private SpriteBatch batch;
     private BitmapFont font;
-    private Rectangle hitbox;
     private TextureRegion currentFrame;
     public Vector2 position;
     public Vector2 projectile_position;
@@ -40,7 +37,6 @@ public class speedZombie extends Enemy {
         super(new Texture(Gdx.files.internal("speedZombieRight.png")), 0, 450, 50);
         batch = new SpriteBatch();
         font = new BitmapFont();
-        hitbox = new Rectangle(x, y, 70, 70); // Create the hitbox with initial position and size
         // Buat Zombie
         zombieTextureMoveRight = new Texture(Gdx.files.internal("speedZombieRight.png"));
 
@@ -56,19 +52,14 @@ public class speedZombie extends Enemy {
         speedZombie = new Array<Rectangle>();
         zombieAnimationRight = new Animation<>(0.3f, walkFramesRight);
 
-        zombies = new Array<>();
-
-        screenWidth = Gdx.graphics.getWidth();
-        screenHeight = Gdx.graphics.getHeight();
         currentFrame = walkFramesRight[0]; // Set initial frame to zombieMoveRight
 
-        Texture texture = new Texture(Gdx.files.internal("Turret_fix.png"));
-        sprite = new Sprite(texture);
+
         Texture projectile_texture = new Texture(Gdx.files.internal("fireBullet.png"));
         projectile_sprite = new Sprite(projectile_texture);
-        sprite.setScale((float) 0.5);
         projectile_sprite.setScale((float) 0.2);
-        position = new Vector2(1500, sprite.getScaleY() * sprite.getHeight() / 2);
+        float desiredScale = 0.5f;  // Set the desired scale value
+        position = new Vector2(1500, desiredScale * 510 / 2);
         projectile_position = new Vector2(0, 1000);
         tower = new Tower();
         tower.Update(Gdx.graphics.getDeltaTime());
@@ -133,6 +124,7 @@ public class speedZombie extends Enemy {
 
         batch.end();
         tower.Draw(batch);
+        Draw(batch);
     }
 
     public float getX() {
@@ -142,21 +134,31 @@ public class speedZombie extends Enemy {
     public float getY() {
         return y;
     }
+    public void Update(float deltatime){
+        if (Gdx.input.isKeyPressed(Input.Keys.SPACE)){
+            projectile_position.x = position.x;
+            projectile_position.y = position.y;
+        }
+        if (Gdx.input.isKeyPressed(Input.Keys.W)){
+            position.y += deltatime * speed;
+        }
 
-    @Override
-    public int setHealth() {
-        return health = 50;
+        if (Gdx.input.isKeyPressed(Input.Keys.S)){
+            position.y -= deltatime * speed;
+        }
+
+
+
+        projectile_position.x -= deltatime*projectile_speed;
     }
 
-    @Override
-    public int getHealth() {
-        return this.health;
+    public void Draw(SpriteBatch batch) {
+        Update(Gdx.graphics.getDeltaTime());
+        projectile_sprite.setPosition(projectile_position.x+250,projectile_position.y+100);
+        batch.begin();
+        projectile_sprite.draw(batch);
+        batch.end();
     }
-
-    public boolean isGameOver() {
-        return gameOver;
-    }
-
 }
 
 
