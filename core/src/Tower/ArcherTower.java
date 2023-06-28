@@ -47,7 +47,7 @@ public class ArcherTower extends Tower{
 
     public void Draw(SpriteBatch batch) {
         Update(Gdx.graphics.getDeltaTime());
-        projectile_sprite.setPosition(projectile_position.x-50, projectile_position.y + 100);
+        projectile_sprite.setPosition(projectile_position.x-70, projectile_position.y + 100);
         sprite.setPosition(position.x, position.y+100);
         batch.begin();
         sprite.draw(batch);

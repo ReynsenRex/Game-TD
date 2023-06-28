@@ -1,5 +1,6 @@
 package Enemies;
 
+import Tower.ArcherTower;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Texture;
@@ -32,6 +33,7 @@ public class Zombie extends Enemy {
     public float projectile_speed = 10000;
     private speedZombie speedZombie;
     private boolean gameOver = false;
+    public ArcherTower archerTower;
 
 
     public Zombie() {
@@ -59,15 +61,7 @@ public class Zombie extends Enemy {
         screenWidth = Gdx.graphics.getWidth();
         screenHeight = Gdx.graphics.getHeight();
         currentFrame = walkFramesRight[0]; // Set initial frame to zombieMoveRight
-
-        Texture texture = new Texture(Gdx.files.internal("Archer_tower.png"));
-        sprite = new Sprite(texture);
-        Texture projectile_texture = new Texture(Gdx.files.internal("arrow.png"));
-        projectile_sprite = new Sprite(projectile_texture);
-        sprite.setScale((float) 0.8);
-        projectile_sprite.setScale((float) 0.3);
-        position = new Vector2(1710, sprite.getScaleY() * sprite.getHeight() / 2);
-        projectile_position = new Vector2(0, position.y - 300);
+        archerTower = new ArcherTower();
     }
 
     @Override
@@ -100,6 +94,7 @@ public class Zombie extends Enemy {
 
     @Override
     public void render() {
+        archerTower.Draw(batch);
         batch.begin();
         stateTime += Gdx.graphics.getDeltaTime(); // Accumulate elapsed animation time
 
@@ -126,7 +121,7 @@ public class Zombie extends Enemy {
             for (Iterator<Rectangle> iter = zombiess.iterator(); iter.hasNext(); ) {
                 Rectangle zombie = iter.next();
                 zombie.x += 100 * Gdx.graphics.getDeltaTime();
-                if (zombie.overlaps(projectile_sprite.getBoundingRectangle())) {
+                if (zombie.overlaps(archerTower.projectile_sprite.getBoundingRectangle())) {
                     iter.remove();
                 }
             }
@@ -139,7 +134,6 @@ public class Zombie extends Enemy {
         }
 
         batch.end();
-        Draw(batch);
         speedZombie.render();
     }
 
@@ -150,33 +144,6 @@ public class Zombie extends Enemy {
     public float getY() {
         return y;
     }
-
-    public void Update(float deltatime) {
-        if (Gdx.input.isKeyPressed(Input.Keys.ENTER )) {
-            projectile_position.x = position.x;
-            projectile_position.y = position.y;
-        }
-        if (Gdx.input.isKeyPressed(Input.Keys.UP)) {
-            position.y += deltatime * speed;
-        }
-
-        if (Gdx.input.isKeyPressed(Input.Keys.DOWN)) {
-            position.y -= deltatime * speed;
-        }
-
-        projectile_position.x -= deltatime * projectile_speed;
-    }
-
-    public void Draw(SpriteBatch batch) {
-        Update(Gdx.graphics.getDeltaTime());
-        projectile_sprite.setPosition(projectile_position.x + 250, projectile_position.y + 100);
-        sprite.setPosition(position.x, position.y);
-        batch.begin();
-        sprite.draw(batch);
-        projectile_sprite.draw(batch);
-        batch.end();
-    }
-
 }
 
 
