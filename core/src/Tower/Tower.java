@@ -24,7 +24,7 @@ public class Tower {
         projectile_sprite = new Sprite(projectile_texture);
         sprite.setScale((float) 0.5);
         projectile_sprite.setScale((float) 0.2);
-        position = new Vector2(1500, sprite.getScaleY() * sprite.getHeight() / 2);
+        position = new Vector2(1500, -200);
         projectile_position = new Vector2(0, 1000);
     }
 
@@ -35,13 +35,15 @@ public class Tower {
         }
         if (Gdx.input.isKeyPressed(Input.Keys.W)) {
             position.y += deltatime * speed;
+            // Pembatas Atas
+            position.y = Math.min(position.y, Gdx.graphics.getHeight() - 300);
         }
 
         if (Gdx.input.isKeyPressed(Input.Keys.S)) {
             position.y -= deltatime * speed;
+            // Pembatas Bawah
+            position.y = Math.max(position.y, -200);
         }
-
-
         projectile_position.x -= deltatime * projectile_speed;
     }
 
