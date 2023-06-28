@@ -14,6 +14,7 @@ import com.mygdx.game.Tower;
 import java.util.Iterator;
 
 public class speedZombie extends Enemy {
+    private Texture projectile_texture;
     private Animation<TextureRegion> zombieAnimationRight;
     private Texture zombieTextureMoveRight;
     public float x, y;
@@ -23,15 +24,9 @@ public class speedZombie extends Enemy {
     private SpriteBatch batch;
     private BitmapFont font;
     private TextureRegion currentFrame;
-    public Vector2 position;
-    public Vector2 projectile_position;
-    public Sprite sprite;
-    public Sprite projectile_sprite;
-    public float speed = 1000;
-    public float projectile_speed = 10000;
     private boolean gameOver = false;
     private Tower tower;
-
+    private boolean isAlive = true;
 
     public speedZombie() {
         super(new Texture(Gdx.files.internal("speedZombieRight.png")), 0, 450, 50);
@@ -52,17 +47,9 @@ public class speedZombie extends Enemy {
         speedZombie = new Array<Rectangle>();
         zombieAnimationRight = new Animation<>(0.3f, walkFramesRight);
 
-        currentFrame = walkFramesRight[0]; // Set initial frame to zombieMoveRight
+        currentFrame = walkFramesRight[0];
 
-
-        Texture projectile_texture = new Texture(Gdx.files.internal("fireBullet.png"));
-        projectile_sprite = new Sprite(projectile_texture);
-        projectile_sprite.setScale((float) 0.2);
-        float desiredScale = 0.5f;  // Set the desired scale value
-        position = new Vector2(1500, desiredScale * 510 / 2);
-        projectile_position = new Vector2(0, 1000);
         tower = new Tower();
-        tower.Update(Gdx.graphics.getDeltaTime());
     }
 
     @Override
@@ -83,34 +70,40 @@ public class speedZombie extends Enemy {
 
     @Override
     public void render() {
+        tower.Draw(batch);
         batch.begin();
         stateTime += Gdx.graphics.getDeltaTime(); // Accumulate elapsed animation time
 
         if (!gameOver) {
+
+
             // Spawn a new zombie if it's time
             if (TimeUtils.nanoTime() > nextSpawnTime) {
                 spawnZombie();
                 nextSpawnTime = generateNextSpawnTime();
             }
-
             for (Rectangle zombie : speedZombie) {
-                batch.draw(currentFrame, zombie.x, zombie.y, 100, 100);
 
+                batch.draw(currentFrame, zombie.x, zombie.y, 100, 100);
+                zombie.x += 200 * Gdx.graphics.getDeltaTime();
                 // Check if zombie reaches the right end of the screen
                 if (zombie.x + zombie.width >= 1920) {
                     // Game over logic
                     gameOver = true;
                     break;
                 }
+                isAlive = true;
             }
-
             // Move and render zombies
+            if (isAlive) {
             for (Iterator<Rectangle> iter = speedZombie.iterator(); iter.hasNext(); ) {
                 Rectangle zombie = iter.next();
-                zombie.x += 200 * Gdx.graphics.getDeltaTime();
-                if (zombie.y + 64 < 0) iter.remove();
-                if (zombie.overlaps(projectile_sprite.getBoundingRectangle())) {
-                    iter.remove();
+                    if (zombie.overlaps(tower.projectile_sprite.getBoundingRectangle())) {
+                        tower.projectile_position.x = 10000;
+                        iter.remove();
+                        isAlive = false;
+                        break;
+                    }
                 }
             }
 
@@ -123,8 +116,7 @@ public class speedZombie extends Enemy {
         }
 
         batch.end();
-        tower.Draw(batch);
-        Draw(batch);
+
     }
 
     public float getX() {
@@ -134,31 +126,7 @@ public class speedZombie extends Enemy {
     public float getY() {
         return y;
     }
-    public void Update(float deltatime){
-        if (Gdx.input.isKeyPressed(Input.Keys.SPACE)){
-            projectile_position.x = position.x;
-            projectile_position.y = position.y;
-        }
-        if (Gdx.input.isKeyPressed(Input.Keys.W)){
-            position.y += deltatime * speed;
-        }
 
-        if (Gdx.input.isKeyPressed(Input.Keys.S)){
-            position.y -= deltatime * speed;
-        }
-
-
-
-        projectile_position.x -= deltatime*projectile_speed;
-    }
-
-    public void Draw(SpriteBatch batch) {
-        Update(Gdx.graphics.getDeltaTime());
-        projectile_sprite.setPosition(projectile_position.x+250,projectile_position.y+100);
-        batch.begin();
-        projectile_sprite.draw(batch);
-        batch.end();
-    }
 }
 
 
