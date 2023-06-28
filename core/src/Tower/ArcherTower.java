@@ -8,16 +8,11 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 
 public class ArcherTower extends Tower{
-    public Vector2 position;
-    public Vector2 projectile_position;
-    public Sprite sprite;
-    public Sprite projectile_sprite;
-    public float speed = 1000;
-    public float projectile_speed = 10000;
 
     public ArcherTower() {
         Texture texture = new Texture(Gdx.files.internal("Archer_tower.png"));
         sprite = new Sprite(texture);
+        super.shootingSound = Gdx.audio.newSound(Gdx.files.internal("arrow_shoot.mp3"));
 
         Texture projectile_texture = new Texture(Gdx.files.internal("arrow.png"));
         projectile_sprite = new Sprite(projectile_texture);
@@ -26,11 +21,13 @@ public class ArcherTower extends Tower{
         projectile_sprite.setScale((float) 0.3);
         projectile_sprite.rotate(90);
 
-        position = new Vector2(sprite.getScaleX() * sprite.getHeight() / 2, 800);
+        position = new Vector2(sprite.getScaleX() * sprite.getHeight() / 2 + 750, 800);
         projectile_position = new Vector2(position.x, position.y);
     }
+
     public void Update(float deltatime) {
         if (Gdx.input.isKeyPressed(Input.Keys.ENTER )) {
+            shootingSound.play(0.8f);
             projectile_position.x = position.x;
             projectile_position.y = position.y;
         }

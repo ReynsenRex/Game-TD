@@ -3,6 +3,7 @@ package Tower;
 import Enemies.speedZombie;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -16,20 +17,26 @@ public class Tower {
     public Sprite projectile_sprite;
     public float speed = 1000;
     public float projectile_speed = 10000;
+    public Sound shootingSound;
 
     public Tower() {
         Texture texture = new Texture(Gdx.files.internal("Turret_fix.png"));
         sprite = new Sprite(texture);
+        shootingSound = Gdx.audio.newSound(Gdx.files.internal("Blaster_short.mp3"));
+
         Texture projectile_texture = new Texture(Gdx.files.internal("fireBullet.png"));
         projectile_sprite = new Sprite(projectile_texture);
+
         sprite.setScale((float) 0.5);
         projectile_sprite.setScale((float) 0.2);
-        position = new Vector2(1500, -200);
+
+        position = new Vector2(1500, Gdx.graphics.getHeight()/2 - 250);
         projectile_position = new Vector2(0, 1000);
     }
 
     public void Update(float deltatime) {
         if (Gdx.input.isKeyPressed(Input.Keys.SPACE)) {
+            shootingSound.play(0.5f);
             projectile_position.x = position.x;
             projectile_position.y = position.y;
         }
