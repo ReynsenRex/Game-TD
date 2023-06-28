@@ -30,8 +30,6 @@ public class MyGdxGame extends ApplicationAdapter {
     public Timer timer;
     public GameOver gameOver;
 
-
-
     @Override
     public void create() {
 

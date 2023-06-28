@@ -10,6 +10,7 @@ public class Timer implements TimerInterface{
     private float timer;
     private int points;
     private BitmapFont font;
+
     @Override
     public void startTimer(SpriteBatch batch) {
 
@@ -24,5 +25,8 @@ public class Timer implements TimerInterface{
         font.getData().setScale(5);
         font.setColor(Color.RED);
         font.draw(batch, "Timer: " + points, 100, 200);
+    }
+    public int getPoints() {
+        return points;
     }
 }

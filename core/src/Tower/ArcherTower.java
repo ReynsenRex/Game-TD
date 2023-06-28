@@ -26,7 +26,7 @@ public class ArcherTower extends Tower{
     }
 
     public void Update(float deltatime) {
-        if (Gdx.input.isKeyPressed(Input.Keys.ENTER )) {
+        if (Gdx.input.isKeyPressed(Input.Keys.ENTER)) {
             shootingSound.play(0.8f);
             projectile_position.x = position.x;
             projectile_position.y = position.y;
