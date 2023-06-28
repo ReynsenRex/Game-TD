@@ -154,7 +154,7 @@ public class Zombie extends Enemy {
     }
 
     public void Update(float deltatime) {
-        if (Gdx.input.isKeyPressed(Input.Keys.SPACE)) {
+        if (Gdx.input.isKeyPressed(Input.Keys.ENTER )) {
             projectile_position.x = position.x;
             projectile_position.y = position.y;
         }
