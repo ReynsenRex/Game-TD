@@ -1,4 +1,4 @@
-package com.mygdx.game;
+package Tower;
 
 public class ArcherTower extends Tower{
 

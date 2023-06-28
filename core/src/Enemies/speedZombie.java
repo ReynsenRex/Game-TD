@@ -1,20 +1,17 @@
 package Enemies;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.*;
 import com.badlogic.gdx.math.MathUtils;
-import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.TimeUtils;
 import com.badlogic.gdx.math.Rectangle;
-import com.mygdx.game.Tower;
+import Tower.Tower;
 
 import java.util.Iterator;
 
 public class speedZombie extends Enemy {
-    private Texture projectile_texture;
     private Animation<TextureRegion> zombieAnimationRight;
     private Texture zombieTextureMoveRight;
     public float x, y;
@@ -75,7 +72,6 @@ public class speedZombie extends Enemy {
         stateTime += Gdx.graphics.getDeltaTime(); // Accumulate elapsed animation time
 
         if (!gameOver) {
-
 
             // Spawn a new zombie if it's time
             if (TimeUtils.nanoTime() > nextSpawnTime) {

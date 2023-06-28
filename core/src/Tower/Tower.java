@@ -1,4 +1,4 @@
-package com.mygdx.game;
+package Tower;
 
 import Enemies.speedZombie;
 import com.badlogic.gdx.Gdx;

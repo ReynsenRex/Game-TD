@@ -126,7 +126,6 @@ public class Zombie extends Enemy {
             for (Iterator<Rectangle> iter = zombiess.iterator(); iter.hasNext(); ) {
                 Rectangle zombie = iter.next();
                 zombie.x += 100 * Gdx.graphics.getDeltaTime();
-                if (zombie.y + 64 < 0) iter.remove();
                 if (zombie.overlaps(projectile_sprite.getBoundingRectangle())) {
                     iter.remove();
                 }
