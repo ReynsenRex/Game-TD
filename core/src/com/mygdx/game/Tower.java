@@ -19,17 +19,17 @@ public class Tower {
 
 
     public Tower() {
-        Texture texture = new Texture(Gdx.files.internal("Turret_fix.png"));
+        Texture texture = new Texture(Gdx.files.internal("Archer_tower.png"));
         sprite = new Sprite(texture);
-        Texture projectile_texture = new Texture(Gdx.files.internal("fireBullet.png"));
+        Texture projectile_texture = new Texture(Gdx.files.internal("arrow.png"));
         projectile_sprite = new Sprite(projectile_texture);
-        sprite.setScale((float) 0.5);
-        projectile_sprite.setScale((float) 0.2);
-        position = new Vector2(1500,sprite.getScaleY()*sprite.getHeight()/2);
-        projectile_position = new Vector2(0,1000);
+        sprite.setScale((float) 0.8);
+        projectile_sprite.setScale((float) 0.4);
+        position = new Vector2(1600,sprite.getScaleY()*sprite.getHeight()/2);
+        projectile_position = new Vector2(0,sprite.getScaleY());
     }
 
-    public void Update(float deltatime){
+    public void UpdateT1(float deltatime){
         if (Gdx.input.isKeyPressed(Input.Keys.SPACE)){
             projectile_position.x = position.x;
             projectile_position.y = position.y;
@@ -48,7 +48,7 @@ public class Tower {
     }
 
     public void Draw(SpriteBatch batch) {
-        Update(Gdx.graphics.getDeltaTime());
+        UpdateT1(Gdx.graphics.getDeltaTime());
         projectile_sprite.setPosition(projectile_position.x+250,projectile_position.y+100);
         sprite.setPosition(position.x, position.y);
         batch.begin();
