@@ -60,14 +60,14 @@ public class Zombie extends Enemy {
         screenHeight = Gdx.graphics.getHeight();
         currentFrame = walkFramesRight[0]; // Set initial frame to zombieMoveRight
 
-        Texture texture = new Texture(Gdx.files.internal("Turret_fix.png"));
+        Texture texture = new Texture(Gdx.files.internal("Archer_tower.png"));
         sprite = new Sprite(texture);
-        Texture projectile_texture = new Texture(Gdx.files.internal("fireBullet.png"));
+        Texture projectile_texture = new Texture(Gdx.files.internal("arrow.png"));
         projectile_sprite = new Sprite(projectile_texture);
-        sprite.setScale((float) 0.5);
-        projectile_sprite.setScale((float) 0.2);
-        position = new Vector2(1500, sprite.getScaleY() * sprite.getHeight() / 2);
-        projectile_position = new Vector2(0, 1000);
+        sprite.setScale((float) 0.8);
+        projectile_sprite.setScale((float) 0.3);
+        position = new Vector2(1710, sprite.getScaleY() * sprite.getHeight() / 2);
+        projectile_position = new Vector2(0, position.y - 300);
     }
 
     @Override

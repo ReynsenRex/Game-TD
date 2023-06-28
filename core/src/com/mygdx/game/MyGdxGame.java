@@ -14,6 +14,7 @@ import com.badlogic.gdx.graphics.g2d.*;
 import com.badlogic.gdx.math.Circle;
 import com.badlogic.gdx.math.Rectangle;
 
+import java.security.Key;
 import java.util.ArrayList;
 
 public class MyGdxGame extends ApplicationAdapter {
@@ -27,15 +28,14 @@ public class MyGdxGame extends ApplicationAdapter {
     boolean play = false;
     private Enemy zombie, speedZombie;
     private Tower tower;
-    private int points = 0;
-    private float timer;
+    public Timer timer;
+
+
 
     @Override
     public void create() {
 
         batch = new SpriteBatch();
-        timer = 0;
-        points = 0;
 
         // MAP
         texture = new Texture("Map.png");
@@ -58,7 +58,7 @@ public class MyGdxGame extends ApplicationAdapter {
         tower = new Tower();
         zombie = new Zombie();
         speedZombie = new speedZombie();
-        //player = new Player();
+        timer = new Timer();
     }
 
     @Override
@@ -76,15 +76,6 @@ public class MyGdxGame extends ApplicationAdapter {
 
         if (play) {
             bgMusic.play();
-
-            // Update the timer
-            timer += Gdx.graphics.getDeltaTime();
-            // Check if one second has elapsed
-            if (timer >= 1.0f) {
-                points += 1;
-                timer -= 1.0f;
-            }
-
             // Update the camera
             camera.update();
             batch.setProjectionMatrix(camera.combined);
@@ -94,10 +85,7 @@ public class MyGdxGame extends ApplicationAdapter {
 
             // Render the map
             sprite.draw(batch);
-            font.getData().setScale(5);
-            font.setColor(Color.RED);
-            font.draw(batch, "Timer: " + points, 100, 200);
-
+            timer.startTimer(batch);
             batch.end();
             zombie.render();
         }
