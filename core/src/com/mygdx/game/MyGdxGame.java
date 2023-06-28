@@ -6,6 +6,7 @@ import Enemies.speedZombie;
 import Interface.Timer;
 import Tower.Tower;
 import com.badlogic.gdx.ApplicationAdapter;
+import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.audio.Music;
@@ -27,6 +28,7 @@ public class MyGdxGame extends ApplicationAdapter {
     private Enemy zombie, speedZombie;
     private Tower tower;
     public Timer timer;
+    public GameOver gameOver;
 
 
 
@@ -57,6 +59,7 @@ public class MyGdxGame extends ApplicationAdapter {
         zombie = new Zombie();
         speedZombie = new speedZombie();
         timer = new Timer();
+        gameOver = new GameOver();
     }
 
     @Override
@@ -80,7 +83,6 @@ public class MyGdxGame extends ApplicationAdapter {
 
             // Begin the sprite batch
             batch.begin();
-
             // Render the map
             sprite.draw(batch);
             timer.startTimer(batch);
