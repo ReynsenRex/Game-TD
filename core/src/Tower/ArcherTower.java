@@ -1,4 +1,4 @@
-package com.mygdx.game;
+package Tower;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
